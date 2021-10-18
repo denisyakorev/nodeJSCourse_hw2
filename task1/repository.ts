@@ -12,7 +12,6 @@ export type IRepository = {
 export class Repository implements IRepository {
     users: User[] = [];
 
-    //TODO
     createUser = async (user: Omit<User, "id">): Promise<string> => {
         const id = uuidv4();
         this.users.push({
