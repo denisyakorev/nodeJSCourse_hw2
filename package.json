@@ -1,0 +1,24 @@
+{
+  "name": "nodejscourse_hw2",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/denisyakorev/nodeJSCourse_hw2.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/denisyakorev/nodeJSCourse_hw2/issues"
+  },
+  "homepage": "https://github.com/denisyakorev/nodeJSCourse_hw2#readme",
+  "dependencies": {
+    "babel": "^6.23.0",
+    "eslint": "^8.0.1",
+    "nodemon": "^2.0.13"
+  }
+}
