@@ -5,7 +5,7 @@ export type IRepository = {
     createUser: (user: Omit<User, "id">) => Promise<string>;
     deleteUser: (user: User) => Promise<boolean>;
     getAutoSuggestUsers: (loginSubstring: string, limit: number) => Promise<User[]>;
-    getUser: (id: number) => Promise<User | undefined>;
+    getUser: (id: string) => Promise<User | undefined>;
     updateUser: (user: User) => Promise<User>;
 };
 
@@ -21,9 +21,15 @@ export class Repository implements IRepository {
         return id;
     };
 
-    //TODO
     deleteUser = async (user: User): Promise<boolean> => {
-        return false;
+        const existingUser = await this.getUser(user.id);
+        if (existingUser) {
+            this.updateUser({
+                ...user,
+                isDeleted: true
+            });
+        }
+       return true;
     };
 
     //TODO
@@ -31,13 +37,20 @@ export class Repository implements IRepository {
         return [];
     }
 
-    //TODO
-    getUser = async (id: number): Promise<User | undefined> => {
-        return undefined;
+    getUser = async (id: string): Promise<User | undefined> => {
+        return this.users.find(user => user.id === id);
     }
 
-    //TODO
     updateUser = async (user: User): Promise<User> => {
+        const userIdx = this.users.findIndex(userFromList => userFromList.id === user.id);
+        if (userIdx !== -1) {
+            this.users = [
+                ...this.users.slice(0, userIdx),
+                user,
+                ...this.users.slice(userIdx + 1)
+            ]
+        }
         return user;
+
     }
 }
