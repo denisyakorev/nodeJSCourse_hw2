@@ -6,4 +6,5 @@ var app = express();
 var port = 3000;
 app.get('/', views_1.homepage);
 app.get('/user/:id', views_1.getUser);
+app.get('/user', views_1.getAutoSuggestUsers);
 app.listen(port, function () { return console.log("Server started on port " + port); });

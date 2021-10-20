@@ -36,20 +36,20 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
     }
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.getUser = exports.homepage = void 0;
+exports.getAutoSuggestUsers = exports.getUser = exports.homepage = void 0;
 var repository_1 = require("../repository");
+var repository = new repository_1.Repository();
 var homepage = function (req, res) {
     res.send("Please, use /user route");
 };
 exports.homepage = homepage;
 var getUser = function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
-    var id, repo, user;
+    var id, user;
     return __generator(this, function (_a) {
         switch (_a.label) {
             case 0:
                 id = req.params.id;
-                repo = new repository_1.Repository();
-                return [4 /*yield*/, repo.getUser(id)];
+                return [4 /*yield*/, repository.getUser(id)];
             case 1:
                 user = _a.sent();
                 if (user) {
@@ -64,3 +64,27 @@ var getUser = function (req, res) { return __awaiter(void 0, void 0, void 0, fun
     });
 }); };
 exports.getUser = getUser;
+var getAutoSuggestUsers = function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
+    var loginSubstring, limit, users;
+    var _a;
+    return __generator(this, function (_b) {
+        switch (_b.label) {
+            case 0:
+                loginSubstring = (_a = req.query.loginSubstring) === null || _a === void 0 ? void 0 : _a.toString();
+                limit = req.query.limit ? parseInt(req.query.limit.toString()) : 0;
+                if (!(loginSubstring && limit)) return [3 /*break*/, 2];
+                return [4 /*yield*/, repository.getAutoSuggestUsers(loginSubstring, limit)];
+            case 1:
+                users = _b.sent();
+                res.json(users);
+                return [3 /*break*/, 3];
+            case 2:
+                res.sendStatus(400);
+                _b.label = 3;
+            case 3:
+                res.end();
+                return [2 /*return*/];
+        }
+    });
+}); };
+exports.getAutoSuggestUsers = getAutoSuggestUsers;
