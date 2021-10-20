@@ -32,9 +32,15 @@ export class Repository implements IRepository {
        return true;
     };
 
-    //TODO
     getAutoSuggestUsers = async (loginSubstring: string, limit: number): Promise<User[]> => {
-        return [];
+        let result = [];
+        for(const user of this.users) {
+          if (result.length === limit) break;
+          if(user.login.includes(loginSubstring)) {
+              result.push(user);
+          }
+        };
+        return result;
     }
 
     getUser = async (id: string): Promise<User | undefined> => {

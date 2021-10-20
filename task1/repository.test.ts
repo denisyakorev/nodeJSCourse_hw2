@@ -114,4 +114,28 @@ describe('Repository', () => {
         expect(result).toEqual(user3);
         expect(repository.users).toEqual([user1, user2]);
     });
+
+    it('should return empty list of autosuggested users if limit equals 0', async () =>{
+        repository.users = [user1, user2, user3];
+
+        const result = await repository.getAutoSuggestUsers('log', 0);
+
+        expect(result).toEqual([]);
+    });
+
+    it('should return empty list of autosuggested users if there are not similar logins', async () =>{
+        repository.users = [user1, user2, user3];
+
+        const result = await repository.getAutoSuggestUsers('abc', 3);
+
+        expect(result).toEqual([]);
+    });
+
+    it('should return list of autosuggested users with right length if there are similar logins', async () =>{
+        repository.users = [user1, user2, user3];
+
+        const result = await repository.getAutoSuggestUsers('log', 2);
+
+        expect(result).toEqual([user1, user2]);
+    });
 });
