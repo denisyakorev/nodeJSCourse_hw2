@@ -66,7 +66,7 @@ var Repository = /** @class */ (function () {
             var id;
             return __generator(this, function (_a) {
                 id = (0, uuid_1.v4)();
-                this.users.push(__assign(__assign({}, user), { id: id }));
+                this.users.push(__assign(__assign({}, user), { id: id, isDeleted: false }));
                 return [2 /*return*/, id];
             });
         }); };

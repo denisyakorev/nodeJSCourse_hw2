@@ -82,7 +82,6 @@ describe('Repository', function () {
                     user = {
                         login: 'login',
                         password: 'password',
-                        isDeleted: false,
                         age: 20,
                     };
                     repository.users = [];
@@ -92,6 +91,7 @@ describe('Repository', function () {
                     expect(id).toBeTruthy();
                     expect(repository.users).toEqual([__assign(__assign({}, repository.users[0]), user)]);
                     expect(repository.users[0].id).toBeTruthy();
+                    expect(repository.users[0].isDeleted).toBe(false);
                     return [2 /*return*/];
             }
         });

@@ -36,7 +36,6 @@ describe('Repository', () => {
         const user = {
             login: 'login',
             password: 'password',
-            isDeleted: false,
             age: 20,
         };
 
@@ -49,6 +48,7 @@ describe('Repository', () => {
             ...user
         }]);
         expect(repository.users[0].id).toBeTruthy();
+        expect(repository.users[0].isDeleted).toBe(false);
     });
 
     it('should delete users from array', async () => {

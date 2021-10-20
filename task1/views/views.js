@@ -36,7 +36,7 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
     }
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.getAutoSuggestUsers = exports.getUser = exports.homepage = void 0;
+exports.addUser = exports.getAutoSuggestUsers = exports.getUser = exports.homepage = void 0;
 var repository_1 = require("../repository");
 var repository = new repository_1.Repository();
 var homepage = function (req, res) {
@@ -88,3 +88,32 @@ var getAutoSuggestUsers = function (req, res) { return __awaiter(void 0, void 0,
     });
 }); };
 exports.getAutoSuggestUsers = getAutoSuggestUsers;
+var addUser = function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
+    var login, age, password, id, e_1;
+    return __generator(this, function (_a) {
+        switch (_a.label) {
+            case 0:
+                _a.trys.push([0, 2, , 3]);
+                if (!req.body)
+                    throw new Error('Incorrect body');
+                login = req.body.login;
+                age = req.body.age;
+                password = req.body.password;
+                if (!login || !age || !password)
+                    throw new Error('Incorrect data');
+                return [4 /*yield*/, repository.createUser({ login: login, age: age, password: password })];
+            case 1:
+                id = _a.sent();
+                res.send(id);
+                return [3 /*break*/, 3];
+            case 2:
+                e_1 = _a.sent();
+                res.sendStatus(400);
+                return [3 /*break*/, 3];
+            case 3:
+                res.end();
+                return [2 /*return*/];
+        }
+    });
+}); };
+exports.addUser = addUser;

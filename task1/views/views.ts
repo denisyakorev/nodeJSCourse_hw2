@@ -32,3 +32,19 @@ export const getAutoSuggestUsers: ViewHandler = async (req, res) => {
     }
     res.end();
 };
+
+export const addUser: ViewHandler = async (req, res) => {
+    try {
+        if(!req.body) throw new Error('Incorrect body');
+        const login = req.body.login;
+        const age = req.body.age;
+        const password = req.body.password;
+        if(!login || !age || !password) throw new Error('Incorrect data');
+
+        const id = await repository.createUser({ login, age, password });
+        res.send(id);
+    } catch(e) {
+      res.sendStatus(400);
+    }
+    res.end();
+};

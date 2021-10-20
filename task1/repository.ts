@@ -12,11 +12,12 @@ export type IRepository = {
 export class Repository implements IRepository {
     users: User[] = [];
 
-    createUser = async (user: Omit<User, "id">): Promise<string> => {
+    createUser = async (user: Omit<User, "id" | "isDeleted">): Promise<string> => {
         const id = uuidv4();
         this.users.push({
             ...user,
-            id
+            id,
+            isDeleted: false,
         });
         return id;
     };
