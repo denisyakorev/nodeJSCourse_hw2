@@ -32,15 +32,26 @@ export class Repository implements IRepository {
        return true;
     };
 
+    private getUsersSortedByLogin = (): User[] => {
+        return [...this.users]
+            .sort( (firstUser, secondUser) => {
+                if (firstUser.login > secondUser.login) return 1;
+                if (firstUser.login < secondUser.login) return -1;
+                return 0;
+            }
+        );
+    }
+
     getAutoSuggestUsers = async (loginSubstring: string, limit: number): Promise<User[]> => {
         let result = [];
-        for(const user of this.users) {
+        const sortedUsers = this.getUsersSortedByLogin();
+        for(const user of sortedUsers) {
           if (result.length === limit) break;
           if(user.login.includes(loginSubstring)) {
               result.push(user);
           }
         };
-        return result;
+        return result.sort();
     }
 
     getUser = async (id: string): Promise<User | undefined> => {
@@ -57,6 +68,5 @@ export class Repository implements IRepository {
             ]
         }
         return user;
-
     }
 }

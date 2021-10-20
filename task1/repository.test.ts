@@ -124,7 +124,7 @@ describe('Repository', () => {
     });
 
     it('should return empty list of autosuggested users if there are not similar logins', async () =>{
-        repository.users = [user1, user2, user3];
+        repository.users = [user3, user2, user1];
 
         const result = await repository.getAutoSuggestUsers('abc', 3);
 
