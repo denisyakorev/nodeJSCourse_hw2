@@ -2,17 +2,19 @@ import { User } from "./types";
 import { v4 as uuidv4 } from 'uuid';
 
 export type IRepository = {
-    createUser: (user: Omit<User, "id">) => Promise<string>;
-    deleteUser: (user: User) => Promise<boolean>;
+    createUser: (user: PublicUser) => Promise<string>;
+    deleteUser: (id: string) => Promise<boolean>;
     getAutoSuggestUsers: (loginSubstring: string, limit: number) => Promise<User[]>;
     getUser: (id: string) => Promise<User | undefined>;
-    updateUser: (user: User) => Promise<User>;
+    updateUser: (user: Omit<User, "isDeleted">) => Promise<User | Omit<User, "isDeleted">>;
 };
+
+export type PublicUser = Omit<User, "id" | "isDeleted">;
 
 export class Repository implements IRepository {
     users: User[] = [];
 
-    createUser = async (user: Omit<User, "id" | "isDeleted">): Promise<string> => {
+    createUser = async (user: PublicUser): Promise<string> => {
         const id = uuidv4();
         this.users.push({
             ...user,
@@ -22,15 +24,12 @@ export class Repository implements IRepository {
         return id;
     };
 
-    deleteUser = async (user: User): Promise<boolean> => {
-        const existingUser = await this.getUser(user.id);
-        if (existingUser) {
-            this.updateUser({
-                ...user,
-                isDeleted: true
-            });
-        }
-       return true;
+    deleteUser = async (id: string): Promise<boolean> => {
+        const existingUser = await this.getUser(id);
+        if(existingUser) {
+            existingUser.isDeleted = true;
+        };
+        return true;
     };
 
     private getUsersSortedByLogin = (): User[] => {
@@ -59,15 +58,19 @@ export class Repository implements IRepository {
         return this.users.find(user => user.id === id);
     }
 
-    updateUser = async (user: User): Promise<User> => {
+    updateUser = async (user: Omit<User, "isDeleted">): Promise<User | Omit<User, "isDeleted">> => {
         const userIdx = this.users.findIndex(userFromList => userFromList.id === user.id);
-        if (userIdx !== -1) {
-            this.users = [
-                ...this.users.slice(0, userIdx),
-                user,
-                ...this.users.slice(userIdx + 1)
-            ]
-        }
-        return user;
+        if (userIdx === -1) return user;
+
+        this.users = [
+            ...this.users.slice(0, userIdx),
+            {
+                ...user,
+                id: this.users[userIdx].id,
+                isDeleted: this.users[userIdx].isDeleted
+            },
+            ...this.users.slice(userIdx + 1)
+        ]
+        return this.users[userIdx];
     }
 }

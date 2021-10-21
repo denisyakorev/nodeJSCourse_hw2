@@ -54,8 +54,8 @@ describe('Repository', () => {
     it('should delete users from array', async () => {
         repository.users = [user1, user2, user3];
 
-        const result1 = await repository.deleteUser(user2);
-        const result2 = await repository.deleteUser(user3);
+        const result1 = await repository.deleteUser(user2.id);
+        const result2 = await repository.deleteUser(user3.id);
 
         expect(result1).toBe(true);
         expect(result2).toBe(true);
@@ -72,7 +72,7 @@ describe('Repository', () => {
     it('should return true if element is not exists', async () => {
         repository.users = [user1, user2];
 
-        const result = await repository.deleteUser(user3);
+        const result = await repository.deleteUser(user3.id);
 
         expect(result).toBe(true);
     });
@@ -96,14 +96,22 @@ describe('Repository', () => {
     it('should update user if it exists', async () => {
        repository.users = [user1, user2];
        const newUser2 = {
-           ...user2,
+           id: user2.id,
+           login: "login89",
+           password: "password89",
            age: 89
        }
 
        const result = await repository.updateUser(newUser2);
 
-       expect(result).toEqual(newUser2);
-       expect(repository.users).toEqual([user1, newUser2]);
+       expect(result).toEqual({
+           ...user2,
+           ...newUser2
+       });
+       expect(repository.users).toEqual([user1, {
+           ...user2,
+           ...newUser2
+       }]);
     });
 
     it('should return user and not update list if user does not exists', async () => {

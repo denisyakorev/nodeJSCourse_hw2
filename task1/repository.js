@@ -70,16 +70,17 @@ var Repository = /** @class */ (function () {
                 return [2 /*return*/, id];
             });
         }); };
-        this.deleteUser = function (user) { return __awaiter(_this, void 0, void 0, function () {
+        this.deleteUser = function (id) { return __awaiter(_this, void 0, void 0, function () {
             var existingUser;
             return __generator(this, function (_a) {
                 switch (_a.label) {
-                    case 0: return [4 /*yield*/, this.getUser(user.id)];
+                    case 0: return [4 /*yield*/, this.getUser(id)];
                     case 1:
                         existingUser = _a.sent();
                         if (existingUser) {
-                            this.updateUser(__assign(__assign({}, user), { isDeleted: true }));
+                            existingUser.isDeleted = true;
                         }
+                        ;
                         return [2 /*return*/, true];
                 }
             });
@@ -119,12 +120,12 @@ var Repository = /** @class */ (function () {
             var userIdx;
             return __generator(this, function (_a) {
                 userIdx = this.users.findIndex(function (userFromList) { return userFromList.id === user.id; });
-                if (userIdx !== -1) {
-                    this.users = __spreadArray(__spreadArray(__spreadArray([], this.users.slice(0, userIdx), true), [
-                        user
-                    ], false), this.users.slice(userIdx + 1), true);
-                }
-                return [2 /*return*/, user];
+                if (userIdx === -1)
+                    return [2 /*return*/, user];
+                this.users = __spreadArray(__spreadArray(__spreadArray([], this.users.slice(0, userIdx), true), [
+                    __assign(__assign({}, user), { id: this.users[userIdx].id, isDeleted: this.users[userIdx].isDeleted })
+                ], false), this.users.slice(userIdx + 1), true);
+                return [2 /*return*/, this.users[userIdx]];
             });
         }); };
     }

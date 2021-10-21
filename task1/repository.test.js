@@ -102,10 +102,10 @@ describe('Repository', function () {
             switch (_a.label) {
                 case 0:
                     repository.users = [user1, user2, user3];
-                    return [4 /*yield*/, repository.deleteUser(user2)];
+                    return [4 /*yield*/, repository.deleteUser(user2.id)];
                 case 1:
                     result1 = _a.sent();
-                    return [4 /*yield*/, repository.deleteUser(user3)];
+                    return [4 /*yield*/, repository.deleteUser(user3.id)];
                 case 2:
                     result2 = _a.sent();
                     expect(result1).toBe(true);
@@ -125,7 +125,7 @@ describe('Repository', function () {
             switch (_a.label) {
                 case 0:
                     repository.users = [user1, user2];
-                    return [4 /*yield*/, repository.deleteUser(user3)];
+                    return [4 /*yield*/, repository.deleteUser(user3.id)];
                 case 1:
                     result = _a.sent();
                     expect(result).toBe(true);
@@ -167,12 +167,17 @@ describe('Repository', function () {
             switch (_a.label) {
                 case 0:
                     repository.users = [user1, user2];
-                    newUser2 = __assign(__assign({}, user2), { age: 89 });
+                    newUser2 = {
+                        id: user2.id,
+                        login: "login89",
+                        password: "password89",
+                        age: 89
+                    };
                     return [4 /*yield*/, repository.updateUser(newUser2)];
                 case 1:
                     result = _a.sent();
-                    expect(result).toEqual(newUser2);
-                    expect(repository.users).toEqual([user1, newUser2]);
+                    expect(result).toEqual(__assign(__assign({}, user2), newUser2));
+                    expect(repository.users).toEqual([user1, __assign(__assign({}, user2), newUser2)]);
                     return [2 /*return*/];
             }
         });

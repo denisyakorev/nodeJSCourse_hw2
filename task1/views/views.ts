@@ -1,5 +1,6 @@
 import {Request, Response} from "express";
 import {Repository} from "../repository";
+import { User } from "../types";
 
 const repository = new Repository();
 
@@ -33,18 +34,44 @@ export const getAutoSuggestUsers: ViewHandler = async (req, res) => {
     res.end();
 };
 
+const checkUserData = (req: Request): Omit<User, "id" | "isDeleted"> => {
+    if(!req.body) throw new Error('Incorrect body');
+    const login = req.body.login;
+    const age = req.body.age;
+    const password = req.body.password;
+    if(!login || !age || !password) throw new Error('Incorrect data');
+
+    return {login, age, password};
+}
+
 export const addUser: ViewHandler = async (req, res) => {
     try {
-        if(!req.body) throw new Error('Incorrect body');
-        const login = req.body.login;
-        const age = req.body.age;
-        const password = req.body.password;
-        if(!login || !age || !password) throw new Error('Incorrect data');
-
-        const id = await repository.createUser({ login, age, password });
+        const user = checkUserData(req);
+        const id = await repository.createUser(user);
         res.send(id);
     } catch(e) {
       res.sendStatus(400);
     }
+    res.end();
+};
+
+export const updateUser: ViewHandler = async (req, res) => {
+    try {
+        const id = req.params.id;
+        const user = {
+            ...checkUserData(req),
+            id
+        };
+        res.send(await repository.updateUser(user));
+    } catch(e) {
+        res.sendStatus(400);
+    }
+    res.end();
+};
+
+export const deleteUser: ViewHandler = async (req, res) => {
+    const id = req.params.id;
+    await repository.deleteUser(id);
+    res.send(id);
     res.end();
 };

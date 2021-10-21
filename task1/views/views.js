@@ -1,4 +1,15 @@
 "use strict";
+var __assign = (this && this.__assign) || function () {
+    __assign = Object.assign || function(t) {
+        for (var s, i = 1, n = arguments.length; i < n; i++) {
+            s = arguments[i];
+            for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p))
+                t[p] = s[p];
+        }
+        return t;
+    };
+    return __assign.apply(this, arguments);
+};
 var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
     function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
     return new (P || (P = Promise))(function (resolve, reject) {
@@ -36,7 +47,7 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
     }
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.addUser = exports.getAutoSuggestUsers = exports.getUser = exports.homepage = void 0;
+exports.deleteUser = exports.updateUser = exports.addUser = exports.getAutoSuggestUsers = exports.getUser = exports.homepage = void 0;
 var repository_1 = require("../repository");
 var repository = new repository_1.Repository();
 var homepage = function (req, res) {
@@ -88,20 +99,24 @@ var getAutoSuggestUsers = function (req, res) { return __awaiter(void 0, void 0,
     });
 }); };
 exports.getAutoSuggestUsers = getAutoSuggestUsers;
+var checkUserData = function (req) {
+    if (!req.body)
+        throw new Error('Incorrect body');
+    var login = req.body.login;
+    var age = req.body.age;
+    var password = req.body.password;
+    if (!login || !age || !password)
+        throw new Error('Incorrect data');
+    return { login: login, age: age, password: password };
+};
 var addUser = function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
-    var login, age, password, id, e_1;
+    var user, id, e_1;
     return __generator(this, function (_a) {
         switch (_a.label) {
             case 0:
                 _a.trys.push([0, 2, , 3]);
-                if (!req.body)
-                    throw new Error('Incorrect body');
-                login = req.body.login;
-                age = req.body.age;
-                password = req.body.password;
-                if (!login || !age || !password)
-                    throw new Error('Incorrect data');
-                return [4 /*yield*/, repository.createUser({ login: login, age: age, password: password })];
+                user = checkUserData(req);
+                return [4 /*yield*/, repository.createUser(user)];
             case 1:
                 id = _a.sent();
                 res.send(id);
@@ -117,3 +132,43 @@ var addUser = function (req, res) { return __awaiter(void 0, void 0, void 0, fun
     });
 }); };
 exports.addUser = addUser;
+var updateUser = function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
+    var id, user, _a, _b, e_2;
+    return __generator(this, function (_c) {
+        switch (_c.label) {
+            case 0:
+                _c.trys.push([0, 2, , 3]);
+                id = req.params.id;
+                user = __assign(__assign({}, checkUserData(req)), { id: id });
+                _b = (_a = res).send;
+                return [4 /*yield*/, repository.updateUser(user)];
+            case 1:
+                _b.apply(_a, [_c.sent()]);
+                return [3 /*break*/, 3];
+            case 2:
+                e_2 = _c.sent();
+                res.sendStatus(400);
+                return [3 /*break*/, 3];
+            case 3:
+                res.end();
+                return [2 /*return*/];
+        }
+    });
+}); };
+exports.updateUser = updateUser;
+var deleteUser = function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
+    var id;
+    return __generator(this, function (_a) {
+        switch (_a.label) {
+            case 0:
+                id = req.params.id;
+                return [4 /*yield*/, repository.deleteUser(id)];
+            case 1:
+                _a.sent();
+                res.send(id);
+                res.end();
+                return [2 /*return*/];
+        }
+    });
+}); };
+exports.deleteUser = deleteUser;
