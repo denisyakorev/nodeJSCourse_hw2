@@ -1,8 +1,14 @@
 import {Request, Response} from "express";
 import {Repository} from "../repository";
 import { User } from "../types";
+import Joi from 'joi';
 
 const repository = new Repository();
+const userScheme = Joi.object({
+    login: Joi.string().required(),
+    password: [Joi.string().required(), Joi.number().required()],
+    age: Joi.number().min(4).max(130).required()
+});
 
 export type ViewHandler = (req: Request, res: Response) => void;
 

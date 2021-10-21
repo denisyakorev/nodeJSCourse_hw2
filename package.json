@@ -24,6 +24,8 @@
     "babel": "^6.23.0",
     "eslint": "^8.0.1",
     "express": "^4.17.1",
+    "express-joi-validation": "^5.0.0",
+    "joi": "^17.4.2",
     "nodemon": "^2.0.13",
     "uuid": "^8.3.2"
   },
