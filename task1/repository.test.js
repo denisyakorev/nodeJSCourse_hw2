@@ -74,6 +74,34 @@ describe('Repository', function () {
     beforeEach(function () {
         repository = new repository_1.Repository();
     });
+    it('should return true if user with login already exists', function () { return __awaiter(void 0, void 0, void 0, function () {
+        var result;
+        return __generator(this, function (_a) {
+            switch (_a.label) {
+                case 0:
+                    repository.users = [user1, user2];
+                    return [4 /*yield*/, repository.isLoginExists(user1.login)];
+                case 1:
+                    result = _a.sent();
+                    expect(result).toBe(true);
+                    return [2 /*return*/];
+            }
+        });
+    }); });
+    it('should return false if user with login does not exist', function () { return __awaiter(void 0, void 0, void 0, function () {
+        var result;
+        return __generator(this, function (_a) {
+            switch (_a.label) {
+                case 0:
+                    repository.users = [user1, user2];
+                    return [4 /*yield*/, repository.isLoginExists(user3.login)];
+                case 1:
+                    result = _a.sent();
+                    expect(result).toBe(false);
+                    return [2 /*return*/];
+            }
+        });
+    }); });
     it('should add user to repository', function () { return __awaiter(void 0, void 0, void 0, function () {
         var user, id;
         return __generator(this, function (_a) {

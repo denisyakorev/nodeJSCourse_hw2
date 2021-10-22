@@ -6,6 +6,7 @@ export type IRepository = {
     deleteUser: (id: string) => Promise<boolean>;
     getAutoSuggestUsers: (loginSubstring: string, limit: number) => Promise<User[]>;
     getUser: (id: string) => Promise<User | undefined>;
+    isLoginExists: (login: string) => Promise<boolean>;
     updateUser: (user: Omit<User, "isDeleted">) => Promise<User | Omit<User, "isDeleted">>;
 };
 
@@ -13,6 +14,14 @@ export type PublicUser = Omit<User, "id" | "isDeleted">;
 
 export class Repository implements IRepository {
     users: User[] = [];
+
+    private static repository?: IRepository
+    public static createRepository = () => {
+        if (!Repository.repository) {
+            Repository.repository = new Repository();
+        }
+        return Repository.repository;
+    }
 
     createUser = async (user: PublicUser): Promise<string> => {
         const id = uuidv4();
@@ -56,6 +65,11 @@ export class Repository implements IRepository {
 
     getUser = async (id: string): Promise<User | undefined> => {
         return this.users.find(user => user.id === id);
+    }
+
+    isLoginExists = async (login: string): Promise<boolean> => {
+        const user = this.users.find(user => user.login === login);
+        return user !== undefined;
     }
 
     updateUser = async (user: Omit<User, "isDeleted">): Promise<User | Omit<User, "isDeleted">> => {

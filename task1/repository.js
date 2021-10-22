@@ -116,6 +116,13 @@ var Repository = /** @class */ (function () {
                 return [2 /*return*/, this.users.find(function (user) { return user.id === id; })];
             });
         }); };
+        this.isLoginExists = function (login) { return __awaiter(_this, void 0, void 0, function () {
+            var user;
+            return __generator(this, function (_a) {
+                user = this.users.find(function (user) { return user.login === login; });
+                return [2 /*return*/, user !== undefined];
+            });
+        }); };
         this.updateUser = function (user) { return __awaiter(_this, void 0, void 0, function () {
             var userIdx;
             return __generator(this, function (_a) {
@@ -129,6 +136,12 @@ var Repository = /** @class */ (function () {
             });
         }); };
     }
+    Repository.createRepository = function () {
+        if (!Repository.repository) {
+            Repository.repository = new Repository();
+        }
+        return Repository.repository;
+    };
     return Repository;
 }());
 exports.Repository = Repository;

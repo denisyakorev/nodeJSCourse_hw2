@@ -32,6 +32,22 @@ describe('Repository', () => {
        repository = new Repository();
     });
 
+    it('should return true if user with login already exists', async () => {
+        repository.users = [user1, user2];
+
+        const result = await repository.isLoginExists(user1.login);
+
+        expect(result).toBe(true);
+    });
+
+    it('should return false if user with login does not exist', async () => {
+        repository.users = [user1, user2];
+
+        const result = await repository.isLoginExists(user3.login);
+
+        expect(result).toBe(false);
+    });
+
     it('should add user to repository', async () => {
         const user = {
             login: 'login',
