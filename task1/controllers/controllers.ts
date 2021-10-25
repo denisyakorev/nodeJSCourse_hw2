@@ -1,7 +1,6 @@
 import {Request, Response} from "express";
 import {Repository} from "../repository";
-import { User } from "../types";
-import {loginValidation, userScheme} from "./validators";
+import {checkUserData, loginValidation} from "./validators";
 
 const repository = Repository.createRepository();
 
@@ -45,19 +44,11 @@ export const getAutoSuggestUsers: ViewHandler = async (req, res) => {
     }
 };
 
-const checkUserData = async (req: Request): Promise<Omit<User, "id" | "isDeleted">> => {
-    if(!req.body) throw new Error('Empty body');
-    const user = await userScheme.validateAsync(req.body);
-    if(user.errors) throw new Error(JSON.stringify(user.errors));
-    return user;
-}
-
 export const addUser: ViewHandler = async (req, res) => {
     let user;
     try {
-        if(!req.body) throw new Error('Empty body');
-        user = await userScheme.validateAsync(req.body);
-        await loginValidation(user.login);
+        user = await checkUserData(req.body);
+        await loginValidation(user.login, repository);
     }catch(err) {
         res.status(400);
         res.send((err as Error).toString());
@@ -71,27 +62,42 @@ export const addUser: ViewHandler = async (req, res) => {
     } catch (e) {
         console.log(e);
         res.status(500)
+    } finally {
+        res.end();
     }
-    res.end();
 };
 
 export const updateUser: ViewHandler = async (req, res) => {
     const id = req.params.id;
-    checkUserData(req)
-        .then(async (user) => {
-            const updatedUser = await repository.updateUser({...user, id});
-            res.send(updatedUser);
-        })
-        .catch((err) => {
-            res.status(400);
-            res.send(err.toString());
-        })
-        .finally(() => res.end());
+    let user;
+    try {
+        user = await checkUserData(req.body);
+    } catch(err) {
+        res.status(400);
+        res.send((err as Error).toString());
+        return res.end();
+    }
+
+    try {
+        const updatedUser = await repository.updateUser({...user, id});
+        res.send(updatedUser);
+    } catch(err) {
+        console.log(err);
+        res.status(500);
+    } finally {
+        res.end();
+    }
 };
 
 export const deleteUser: ViewHandler = async (req, res) => {
     const id = req.params.id;
-    await repository.deleteUser(id);
-    res.send(id);
-    res.end();
+    try {
+        await repository.deleteUser(id);
+        res.send(id);
+    } catch(err) {
+        console.log(err);
+        res.status(500);
+    } finally {
+        res.end();
+    }
 };

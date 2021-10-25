@@ -1,16 +1,17 @@
-import Joi, { ExternalValidationFunction } from "joi";
-import {Repository} from "../repository";
+import Joi from "joi";
 import passwordComplexity from 'joi-password-complexity';
-const repository = Repository.createRepository();
+import {Request} from "express";
+import {User} from "../types";
+import {IRepository} from "../repository";
 
-const passwordConfig = {
-    min: 2,
-    max: 20,
-    numeric: 1,
-    lowerCase: 1
-};
+export const checkUserData = async (req: Request): Promise<Omit<User, "id" | "isDeleted">> => {
+    if(!req.body) throw new Error('Empty body');
+    const user = await userScheme.validateAsync(req.body);
+    if(user.errors) throw new Error(JSON.stringify(user.errors));
+    return user;
+}
 
-export const loginValidation = async (value: string): Promise<string> => {
+export const loginValidation = async (value: string, repository:IRepository): Promise<string> => {
     const isLoginAlreadyExists = await repository.isLoginExists(value);
     if (isLoginAlreadyExists) {
         throw new Error('login already exists');
@@ -19,7 +20,14 @@ export const loginValidation = async (value: string): Promise<string> => {
     }
 }
 
-export const userScheme = Joi.object({
+const passwordConfig = {
+    min: 2,
+    max: 20,
+    numeric: 1,
+    lowerCase: 1
+};
+
+const userScheme = Joi.object({
     login: Joi.string().required(),
     password: passwordComplexity(passwordConfig),
     age: Joi.number().min(4).max(130).required()
