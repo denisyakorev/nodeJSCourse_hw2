@@ -49,135 +49,176 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.deleteUser = exports.updateUser = exports.addUser = exports.getAutoSuggestUsers = exports.getUser = exports.homepage = void 0;
 var repository_1 = require("../repository");
-var validator_1 = require("./validator");
+var validators_1 = require("./validators");
 var repository = repository_1.Repository.createRepository();
 var homepage = function (req, res) {
     res.send("Please, use /user route");
 };
 exports.homepage = homepage;
 var getUser = function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
-    var id, user;
+    var id, user, e_1;
     return __generator(this, function (_a) {
         switch (_a.label) {
             case 0:
                 id = req.params.id;
-                return [4 /*yield*/, repository.getUser(id)];
+                _a.label = 1;
             case 1:
+                _a.trys.push([1, 3, 4, 5]);
+                return [4 /*yield*/, repository.getUser(id)];
+            case 2:
                 user = _a.sent();
                 if (user) {
                     res.json(user);
                 }
                 else {
-                    res.sendStatus(404);
+                    res.status(404);
                 }
+                return [3 /*break*/, 5];
+            case 3:
+                e_1 = _a.sent();
+                res.status(500);
+                return [3 /*break*/, 5];
+            case 4:
                 res.end();
-                return [2 /*return*/];
+                return [7 /*endfinally*/];
+            case 5: return [2 /*return*/];
         }
     });
 }); };
 exports.getUser = getUser;
 var getAutoSuggestUsers = function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
-    var loginSubstring, limit, users;
+    var loginSubstring, limit, users, e_2;
     var _a;
     return __generator(this, function (_b) {
         switch (_b.label) {
             case 0:
                 loginSubstring = (_a = req.query.loginSubstring) === null || _a === void 0 ? void 0 : _a.toString();
                 limit = req.query.limit ? parseInt(req.query.limit.toString()) : 0;
-                if (!(loginSubstring && limit)) return [3 /*break*/, 2];
-                return [4 /*yield*/, repository.getAutoSuggestUsers(loginSubstring, limit)];
+                _b.label = 1;
             case 1:
+                _b.trys.push([1, 5, 6, 7]);
+                if (!(loginSubstring && limit)) return [3 /*break*/, 3];
+                return [4 /*yield*/, repository.getAutoSuggestUsers(loginSubstring, limit)];
+            case 2:
                 users = _b.sent();
                 res.json(users);
-                return [3 /*break*/, 3];
-            case 2:
-                res.sendStatus(400);
-                _b.label = 3;
+                return [3 /*break*/, 4];
             case 3:
+                res.status(400);
+                _b.label = 4;
+            case 4: return [3 /*break*/, 7];
+            case 5:
+                e_2 = _b.sent();
+                res.status(500);
+                return [3 /*break*/, 7];
+            case 6:
                 res.end();
-                return [2 /*return*/];
+                return [7 /*endfinally*/];
+            case 7: return [2 /*return*/];
         }
     });
 }); };
 exports.getAutoSuggestUsers = getAutoSuggestUsers;
-var checkUserData = function (req) { return __awaiter(void 0, void 0, void 0, function () {
-    var user;
+var addUser = function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
+    var user, err_1, id, e_3;
     return __generator(this, function (_a) {
         switch (_a.label) {
             case 0:
-                if (!req.body)
-                    throw new Error('Empty body');
-                return [4 /*yield*/, validator_1.userScheme.validateAsync(req.body)];
+                _a.trys.push([0, 3, , 4]);
+                return [4 /*yield*/, (0, validators_1.checkUserData)(req)];
             case 1:
                 user = _a.sent();
-                if (user.errors)
-                    throw new Error(JSON.stringify(user.errors));
-                return [2 /*return*/, user];
+                return [4 /*yield*/, (0, validators_1.loginValidation)(user.login, repository)];
+            case 2:
+                _a.sent();
+                return [3 /*break*/, 4];
+            case 3:
+                err_1 = _a.sent();
+                res.status(400);
+                res.send(err_1.toString());
+                return [2 /*return*/, res.end()];
+            case 4:
+                _a.trys.push([4, 6, 7, 8]);
+                return [4 /*yield*/, repository.createUser(user)];
+            case 5:
+                id = _a.sent();
+                res.status(201);
+                res.send(id);
+                return [3 /*break*/, 8];
+            case 6:
+                e_3 = _a.sent();
+                console.log(e_3);
+                res.status(500);
+                return [3 /*break*/, 8];
+            case 7:
+                res.end();
+                return [7 /*endfinally*/];
+            case 8: return [2 /*return*/];
         }
-    });
-}); };
-var addUser = function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
-    return __generator(this, function (_a) {
-        checkUserData(req)
-            .then(function (user) { return __awaiter(void 0, void 0, void 0, function () {
-            var id;
-            return __generator(this, function (_a) {
-                switch (_a.label) {
-                    case 0: return [4 /*yield*/, repository.createUser(user)];
-                    case 1:
-                        id = _a.sent();
-                        res.send(id);
-                        return [2 /*return*/];
-                }
-            });
-        }); })
-            .catch(function (err) {
-            res.status(400);
-            res.send(err.toString());
-        })
-            .finally(function () { return res.end(); });
-        return [2 /*return*/];
     });
 }); };
 exports.addUser = addUser;
 var updateUser = function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
-    var id;
-    return __generator(this, function (_a) {
-        id = req.params.id;
-        checkUserData(req)
-            .then(function (user) { return __awaiter(void 0, void 0, void 0, function () {
-            var updatedUser;
-            return __generator(this, function (_a) {
-                switch (_a.label) {
-                    case 0: return [4 /*yield*/, repository.updateUser(__assign(__assign({}, user), { id: id }))];
-                    case 1:
-                        updatedUser = _a.sent();
-                        res.send(updatedUser);
-                        return [2 /*return*/];
-                }
-            });
-        }); })
-            .catch(function (err) {
-            res.status(400);
-            res.send(err.toString());
-        })
-            .finally(function () { return res.end(); });
-        return [2 /*return*/];
-    });
-}); };
-exports.updateUser = updateUser;
-var deleteUser = function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
-    var id;
+    var id, user, err_2, updatedUser, err_3;
     return __generator(this, function (_a) {
         switch (_a.label) {
             case 0:
                 id = req.params.id;
-                return [4 /*yield*/, repository.deleteUser(id)];
+                _a.label = 1;
             case 1:
+                _a.trys.push([1, 3, , 4]);
+                return [4 /*yield*/, (0, validators_1.checkUserData)(req)];
+            case 2:
+                user = _a.sent();
+                return [3 /*break*/, 4];
+            case 3:
+                err_2 = _a.sent();
+                res.status(400);
+                res.send(err_2.toString());
+                return [2 /*return*/, res.end()];
+            case 4:
+                _a.trys.push([4, 6, 7, 8]);
+                return [4 /*yield*/, repository.updateUser(__assign(__assign({}, user), { id: id }))];
+            case 5:
+                updatedUser = _a.sent();
+                res.send(updatedUser);
+                return [3 /*break*/, 8];
+            case 6:
+                err_3 = _a.sent();
+                console.log(err_3);
+                res.status(500);
+                return [3 /*break*/, 8];
+            case 7:
+                res.end();
+                return [7 /*endfinally*/];
+            case 8: return [2 /*return*/];
+        }
+    });
+}); };
+exports.updateUser = updateUser;
+var deleteUser = function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
+    var id, err_4;
+    return __generator(this, function (_a) {
+        switch (_a.label) {
+            case 0:
+                id = req.params.id;
+                _a.label = 1;
+            case 1:
+                _a.trys.push([1, 3, 4, 5]);
+                return [4 /*yield*/, repository.deleteUser(id)];
+            case 2:
                 _a.sent();
                 res.send(id);
+                return [3 /*break*/, 5];
+            case 3:
+                err_4 = _a.sent();
+                console.log(err_4);
+                res.status(500);
+                return [3 /*break*/, 5];
+            case 4:
                 res.end();
-                return [2 /*return*/];
+                return [7 /*endfinally*/];
+            case 5: return [2 /*return*/];
         }
     });
 }); };

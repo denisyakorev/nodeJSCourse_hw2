@@ -24,21 +24,35 @@ export class Repository implements IRepository {
     }
 
     createUser = async (user: PublicUser): Promise<string> => {
-        const id = uuidv4();
-        this.users.push({
-            ...user,
-            id,
-            isDeleted: false,
-        });
-        return id;
+        try {
+            const id = uuidv4();
+            this.users.push({
+                ...user,
+                id,
+                isDeleted: false,
+            });
+            return id;
+        } catch (e) {
+            const message = 'Error during creating user: ' + e;
+            console.log(message);
+            throw new Error(message);
+        }
+
     };
 
     deleteUser = async (id: string): Promise<boolean> => {
-        const existingUser = await this.getUser(id);
-        if(existingUser) {
-            existingUser.isDeleted = true;
-        };
-        return true;
+        try{
+            const existingUser = await this.getUser(id);
+            if(existingUser) {
+                existingUser.isDeleted = true;
+            };
+            return true;
+        } catch(e) {
+            const message = 'Error during deleting user: ' + e;
+            console.log(message);
+            throw new Error(message);
+        }
+
     };
 
     private getUsersSortedByLogin = (): User[] => {
@@ -52,15 +66,22 @@ export class Repository implements IRepository {
     }
 
     getAutoSuggestUsers = async (loginSubstring: string, limit: number): Promise<User[]> => {
-        let result = [];
-        const sortedUsers = this.getUsersSortedByLogin();
-        for(const user of sortedUsers) {
-          if (result.length === limit) break;
-          if(user.login.includes(loginSubstring)) {
-              result.push(user);
-          }
-        };
-        return result.sort();
+        try{
+            let result = [];
+            const sortedUsers = this.getUsersSortedByLogin();
+            for(const user of sortedUsers) {
+                if (result.length === limit) break;
+                if(user.login.includes(loginSubstring)) {
+                    result.push(user);
+                }
+            };
+            return result.sort();
+        } catch(e) {
+            const message = 'Error during finding auto suggests: ' + e;
+            console.log(message);
+            throw new Error(message);
+        }
+
     }
 
     getUser = async (id: string): Promise<User | undefined> => {
@@ -73,18 +94,24 @@ export class Repository implements IRepository {
     }
 
     updateUser = async (user: Omit<User, "isDeleted">): Promise<User | Omit<User, "isDeleted">> => {
-        const userIdx = this.users.findIndex(userFromList => userFromList.id === user.id);
-        if (userIdx === -1) return user;
+        try {
+            const userIdx = this.users.findIndex(userFromList => userFromList.id === user.id);
+            if (userIdx === -1) return user;
 
-        this.users = [
-            ...this.users.slice(0, userIdx),
-            {
-                ...user,
-                id: this.users[userIdx].id,
-                isDeleted: this.users[userIdx].isDeleted
-            },
-            ...this.users.slice(userIdx + 1)
-        ]
-        return this.users[userIdx];
+            this.users = [
+                ...this.users.slice(0, userIdx),
+                {
+                    ...user,
+                    id: this.users[userIdx].id,
+                    isDeleted: this.users[userIdx].isDeleted
+                },
+                ...this.users.slice(userIdx + 1)
+            ]
+            return this.users[userIdx];
+        } catch(e) {
+            const message = 'Error during updating user: ' + e;
+            console.log(message);
+            throw new Error(message);
+        }
     }
 }

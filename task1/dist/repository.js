@@ -63,18 +63,28 @@ var Repository = /** @class */ (function () {
         var _this = this;
         this.users = [];
         this.createUser = function (user) { return __awaiter(_this, void 0, void 0, function () {
-            var id;
+            var id, message;
             return __generator(this, function (_a) {
-                id = (0, uuid_1.v4)();
-                this.users.push(__assign(__assign({}, user), { id: id, isDeleted: false }));
-                return [2 /*return*/, id];
+                try {
+                    id = (0, uuid_1.v4)();
+                    this.users.push(__assign(__assign({}, user), { id: id, isDeleted: false }));
+                    return [2 /*return*/, id];
+                }
+                catch (e) {
+                    message = 'Error during creating user: ' + e;
+                    console.log(message);
+                    throw new Error(message);
+                }
+                return [2 /*return*/];
             });
         }); };
         this.deleteUser = function (id) { return __awaiter(_this, void 0, void 0, function () {
-            var existingUser;
+            var existingUser, e_1, message;
             return __generator(this, function (_a) {
                 switch (_a.label) {
-                    case 0: return [4 /*yield*/, this.getUser(id)];
+                    case 0:
+                        _a.trys.push([0, 2, , 3]);
+                        return [4 /*yield*/, this.getUser(id)];
                     case 1:
                         existingUser = _a.sent();
                         if (existingUser) {
@@ -82,6 +92,12 @@ var Repository = /** @class */ (function () {
                         }
                         ;
                         return [2 /*return*/, true];
+                    case 2:
+                        e_1 = _a.sent();
+                        message = 'Error during deleting user: ' + e_1;
+                        console.log(message);
+                        throw new Error(message);
+                    case 3: return [2 /*return*/];
                 }
             });
         }); };
@@ -95,20 +111,28 @@ var Repository = /** @class */ (function () {
             });
         };
         this.getAutoSuggestUsers = function (loginSubstring, limit) { return __awaiter(_this, void 0, void 0, function () {
-            var result, sortedUsers, _i, sortedUsers_1, user;
+            var result, sortedUsers, _i, sortedUsers_1, user, message;
             return __generator(this, function (_a) {
-                result = [];
-                sortedUsers = this.getUsersSortedByLogin();
-                for (_i = 0, sortedUsers_1 = sortedUsers; _i < sortedUsers_1.length; _i++) {
-                    user = sortedUsers_1[_i];
-                    if (result.length === limit)
-                        break;
-                    if (user.login.includes(loginSubstring)) {
-                        result.push(user);
+                try {
+                    result = [];
+                    sortedUsers = this.getUsersSortedByLogin();
+                    for (_i = 0, sortedUsers_1 = sortedUsers; _i < sortedUsers_1.length; _i++) {
+                        user = sortedUsers_1[_i];
+                        if (result.length === limit)
+                            break;
+                        if (user.login.includes(loginSubstring)) {
+                            result.push(user);
+                        }
                     }
+                    ;
+                    return [2 /*return*/, result.sort()];
                 }
-                ;
-                return [2 /*return*/, result.sort()];
+                catch (e) {
+                    message = 'Error during finding auto suggests: ' + e;
+                    console.log(message);
+                    throw new Error(message);
+                }
+                return [2 /*return*/];
             });
         }); };
         this.getUser = function (id) { return __awaiter(_this, void 0, void 0, function () {
@@ -124,15 +148,23 @@ var Repository = /** @class */ (function () {
             });
         }); };
         this.updateUser = function (user) { return __awaiter(_this, void 0, void 0, function () {
-            var userIdx;
+            var userIdx, message;
             return __generator(this, function (_a) {
-                userIdx = this.users.findIndex(function (userFromList) { return userFromList.id === user.id; });
-                if (userIdx === -1)
-                    return [2 /*return*/, user];
-                this.users = __spreadArray(__spreadArray(__spreadArray([], this.users.slice(0, userIdx), true), [
-                    __assign(__assign({}, user), { id: this.users[userIdx].id, isDeleted: this.users[userIdx].isDeleted })
-                ], false), this.users.slice(userIdx + 1), true);
-                return [2 /*return*/, this.users[userIdx]];
+                try {
+                    userIdx = this.users.findIndex(function (userFromList) { return userFromList.id === user.id; });
+                    if (userIdx === -1)
+                        return [2 /*return*/, user];
+                    this.users = __spreadArray(__spreadArray(__spreadArray([], this.users.slice(0, userIdx), true), [
+                        __assign(__assign({}, user), { id: this.users[userIdx].id, isDeleted: this.users[userIdx].isDeleted })
+                    ], false), this.users.slice(userIdx + 1), true);
+                    return [2 /*return*/, this.users[userIdx]];
+                }
+                catch (e) {
+                    message = 'Error during updating user: ' + e;
+                    console.log(message);
+                    throw new Error(message);
+                }
+                return [2 /*return*/];
             });
         }); };
     }

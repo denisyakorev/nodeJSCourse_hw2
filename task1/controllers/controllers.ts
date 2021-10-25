@@ -17,10 +17,10 @@ export const getUser: ViewHandler = async (req, res) => {
       if (user) {
           res.json(user);
       } else {
-          res.sendStatus(404);
+          res.status(404);
       }
   } catch (e) {
-      res.sendStatus(500);
+      res.status(500);
   } finally {
       res.end();
   }
@@ -35,10 +35,10 @@ export const getAutoSuggestUsers: ViewHandler = async (req, res) => {
             const users = await repository.getAutoSuggestUsers(loginSubstring, limit);
             res.json(users);
         } else {
-            res.sendStatus(400);
+            res.status(400);
         }
     } catch (e) {
-        res.sendStatus(500);
+        res.status(500);
     } finally {
         res.end();
     }
@@ -47,7 +47,7 @@ export const getAutoSuggestUsers: ViewHandler = async (req, res) => {
 export const addUser: ViewHandler = async (req, res) => {
     let user;
     try {
-        user = await checkUserData(req.body);
+        user = await checkUserData(req);
         await loginValidation(user.login, repository);
     }catch(err) {
         res.status(400);
@@ -71,7 +71,7 @@ export const updateUser: ViewHandler = async (req, res) => {
     const id = req.params.id;
     let user;
     try {
-        user = await checkUserData(req.body);
+        user = await checkUserData(req);
     } catch(err) {
         res.status(400);
         res.send((err as Error).toString());

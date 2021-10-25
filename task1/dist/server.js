@@ -11,4 +11,11 @@ app.get('/user/:id', controllers_1.getUser);
 app.put('/user/:id', controllers_1.updateUser);
 app.get('/user', controllers_1.getAutoSuggestUsers);
 app.post('/user', controllers_1.addUser);
+app.use(function errorHandler(err, req, res, next) {
+    console.log(err.stack);
+    if (res.headersSent) {
+        return next(err);
+    }
+    res.status(500);
+});
 app.listen(port, function () { return console.log("Server started on port " + port); });
