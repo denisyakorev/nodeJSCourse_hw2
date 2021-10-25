@@ -10,8 +10,7 @@ const passwordConfig = {
     lowerCase: 1
 };
 
-// @ts-ignore: github issue - https://github.com/sideway/joi/issues/2605
-const loginValidation: ExternalValidationFunction = async (value: string, helpers: any): Promise<string> => {
+export const loginValidation = async (value: string): Promise<string> => {
     const isLoginAlreadyExists = await repository.isLoginExists(value);
     if (isLoginAlreadyExists) {
         throw new Error('login already exists');
@@ -21,7 +20,7 @@ const loginValidation: ExternalValidationFunction = async (value: string, helper
 }
 
 export const userScheme = Joi.object({
-    login: Joi.string().required().external(loginValidation),
+    login: Joi.string().required(),
     password: passwordComplexity(passwordConfig),
     age: Joi.number().min(4).max(130).required()
 });

@@ -1,4 +1,4 @@
-import {Response} from "express";
+import {NextFunction, Response, Request} from "express";
 import {addUser, deleteUser, getAutoSuggestUsers, getUser, homepage, updateUser} from "./controllers";
 
 const express = require('express');
@@ -18,6 +18,15 @@ app.put('/user/:id', updateUser);
 app.get('/user', getAutoSuggestUsers);
 
 app.post('/user', addUser);
+
+app.use(function errorHandler(err: Error, req: Request, res: Response, next: NextFunction) {
+    console.log(err.stack)
+    if (res.headersSent) {
+        return next(err);
+    }
+    res.status(500);
+});
+
 
 
 app.listen(port, () => console.log(`Server started on port ${port}`));

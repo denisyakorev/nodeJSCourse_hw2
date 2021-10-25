@@ -1,7 +1,7 @@
 import {Request, Response} from "express";
 import {Repository} from "../repository";
 import { User } from "../types";
-import {userScheme} from "./validator";
+import {loginValidation, userScheme} from "./validators";
 
 const repository = Repository.createRepository();
 
@@ -13,26 +13,36 @@ export const homepage: ViewHandler = (req, res) => {
 
 export const getUser: ViewHandler = async (req, res) => {
   const id = req.params.id;
-  const user = await repository.getUser(id);
-  if (user) {
-      res.json(user);
-  } else {
-      res.sendStatus(404);
+  try {
+      const user = await repository.getUser(id);
+      if (user) {
+          res.json(user);
+      } else {
+          res.sendStatus(404);
+      }
+  } catch (e) {
+      res.sendStatus(500);
+  } finally {
+      res.end();
   }
-  res.end();
 };
 
 export const getAutoSuggestUsers: ViewHandler = async (req, res) => {
     const loginSubstring = req.query.loginSubstring?.toString();
     const limit = req.query.limit ? parseInt(req.query.limit.toString()) : 0;
 
-    if (loginSubstring && limit) {
-        const users = await repository.getAutoSuggestUsers(loginSubstring, limit);
-        res.json(users);
-    } else {
-        res.sendStatus(400);
+    try {
+        if (loginSubstring && limit) {
+            const users = await repository.getAutoSuggestUsers(loginSubstring, limit);
+            res.json(users);
+        } else {
+            res.sendStatus(400);
+        }
+    } catch (e) {
+        res.sendStatus(500);
+    } finally {
+        res.end();
     }
-    res.end();
 };
 
 const checkUserData = async (req: Request): Promise<Omit<User, "id" | "isDeleted">> => {
@@ -43,17 +53,26 @@ const checkUserData = async (req: Request): Promise<Omit<User, "id" | "isDeleted
 }
 
 export const addUser: ViewHandler = async (req, res) => {
-    checkUserData(req)
-        .then(async (user) => {
-            const id = await repository.createUser(user);
-            res.send(id);
-        })
-        .catch((err) => {
-            res.status(400);
-            res.send(err.toString());
-        })
-        .finally(() => res.end());
+    let user;
+    try {
+        if(!req.body) throw new Error('Empty body');
+        user = await userScheme.validateAsync(req.body);
+        await loginValidation(user.login);
+    }catch(err) {
+        res.status(400);
+        res.send((err as Error).toString());
+        return res.end();
+    }
 
+    try {
+        const id = await repository.createUser(user);
+        res.status(201);
+        res.send(id);
+    } catch (e) {
+        console.log(e);
+        res.status(500)
+    }
+    res.end();
 };
 
 export const updateUser: ViewHandler = async (req, res) => {
