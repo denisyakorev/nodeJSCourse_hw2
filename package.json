@@ -5,9 +5,9 @@
   "main": "index.js",
   "scripts": {
     "test": "jest",
-    "build": "tsc",
+    "build": "tsc --outDir ./task1/dist",
     "prestart": "npm run build",
-    "start": "node task1/server"
+    "start": "node task1/dist/server"
   },
   "repository": {
     "type": "git",
@@ -20,7 +20,6 @@
   },
   "homepage": "https://github.com/denisyakorev/nodeJSCourse_hw2#readme",
   "dependencies": {
-    "@types/uuid": "^8.3.1",
     "babel": "^6.23.0",
     "eslint": "^8.0.1",
     "express": "^4.17.1",
@@ -34,6 +33,7 @@
     "@types/express": "^4.17.13",
     "@types/jest": "^27.0.2",
     "@types/node": "^16.11.1",
+    "@types/uuid": "^8.3.1",
     "jest": "^27.3.0",
     "ts-jest": "^27.0.7",
     "typescript": "^4.4.4"
