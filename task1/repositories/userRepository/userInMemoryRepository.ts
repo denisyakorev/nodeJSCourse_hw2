@@ -1,26 +1,16 @@
-import { User } from "../types";
+import { User } from "../../types";
 import { v4 as uuidv4 } from 'uuid';
+import {IRepository, PublicUser} from "./userRepositoryInterface";
 
-export type IRepository = {
-    createUser: (user: PublicUser) => Promise<string>;
-    deleteUser: (id: string) => Promise<boolean>;
-    getAutoSuggestUsers: (loginSubstring: string, limit: number) => Promise<User[]>;
-    getUser: (id: string) => Promise<User | undefined>;
-    isLoginExists: (login: string) => Promise<boolean>;
-    updateUser: (user: Omit<User, "isDeleted">) => Promise<User | Omit<User, "isDeleted">>;
-};
-
-export type PublicUser = Omit<User, "id" | "isDeleted">;
-
-export class UserRepository implements IRepository {
+export class UserInMemoryRepository implements IRepository {
     users: User[] = [];
 
     private static repository?: IRepository
     public static createRepository = () => {
-        if (!UserRepository.repository) {
-            UserRepository.repository = new UserRepository();
+        if (!UserInMemoryRepository.repository) {
+            UserInMemoryRepository.repository = new UserInMemoryRepository();
         }
-        return UserRepository.repository;
+        return UserInMemoryRepository.repository;
     }
 
     createUser = async (user: PublicUser): Promise<string> => {

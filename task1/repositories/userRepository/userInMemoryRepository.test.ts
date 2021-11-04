@@ -1,8 +1,8 @@
-import {User} from "../types";
-import {UserRepository} from "./userRepository";
+import {User} from "../../types";
+import {UserInMemoryRepository} from "./userInMemoryRepository";
 
 describe('Repository', () => {
-    let repository: UserRepository;
+    let repository: UserInMemoryRepository;
 
     const user1 = {
         id: '1',
@@ -29,7 +29,7 @@ describe('Repository', () => {
     };
 
     beforeEach( () => {
-       repository = new UserRepository();
+       repository = new UserInMemoryRepository();
     });
 
     it('should return true if user with login already exists', async () => {

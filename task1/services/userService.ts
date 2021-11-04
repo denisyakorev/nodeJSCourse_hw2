@@ -1,4 +1,5 @@
-import {IRepository, PublicUser, UserRepository} from "../repositories/userRepository";
+import {UserInMemoryRepository} from "../repositories/userRepository/userInMemoryRepository";
+import {IRepository, PublicUser} from "../repositories/userRepository/userRepositoryInterface";
 import {User} from "../types";
 
 export class UserServiceError extends Error {
@@ -11,15 +12,23 @@ export class userService {
     private repository: IRepository;
 
     constructor() {
-        this.repository = UserRepository.createRepository();
+        this.repository = UserInMemoryRepository.createRepository() as IRepository;
     }
 
     private isLoginExists = async (login: string): Promise<boolean> => {
         return await this.repository.isLoginExists(login);
     };
 
+    private getExistingUser = async (userId: string): Promise<User> => {
+        const existingUser = await this.repository.getUser(userId);
+        if (!existingUser) {
+            throw new UserServiceError('There is no user with such id', true);
+        }
+        return existingUser
+    };
+
     getUser = async (userId: string): Promise<User | undefined> => {
-        return await this.repository.getUser(userId);
+        return await this.getExistingUser(userId);
     };
 
     getAutoSuggest = async (loginSubstring: string | undefined, limit: number): Promise<User[]> => {
@@ -38,10 +47,7 @@ export class userService {
     };
 
     updateUser = async (user: Omit<User, "isDeleted">): Promise<User | Omit<User, "isDeleted">> => {
-        const existingUser = await this.repository.getUser(user.id);
-        if (!existingUser) {
-            throw new UserServiceError('There is no user with such id', true);
-        }
+        const existingUser = await this.getExistingUser(user.id);
         if (existingUser.login !== user.login && await this.isLoginExists(user.login)) {
             throw new UserServiceError('Login already exists', true);
         }
@@ -49,6 +55,7 @@ export class userService {
     };
 
     deleteUser = async (userId: string): Promise<boolean> => {
-        return await this.repository.deleteUser(userId);
+        const existingUser = await this.getExistingUser(userId);
+        return await this.repository.deleteUser(existingUser.id);
     };
 };
