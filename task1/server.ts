@@ -1,5 +1,5 @@
 import {NextFunction, Response, Request} from "express";
-import { userRouter } from "./router";
+import { userRouter } from "./routers";
 
 const express = require('express');
 const app = express();

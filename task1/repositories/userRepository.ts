@@ -1,4 +1,4 @@
-import { User } from "./types";
+import { User } from "../types";
 import { v4 as uuidv4 } from 'uuid';
 
 export type IRepository = {
@@ -12,15 +12,15 @@ export type IRepository = {
 
 export type PublicUser = Omit<User, "id" | "isDeleted">;
 
-export class Repository implements IRepository {
+export class UserRepository implements IRepository {
     users: User[] = [];
 
     private static repository?: IRepository
     public static createRepository = () => {
-        if (!Repository.repository) {
-            Repository.repository = new Repository();
+        if (!UserRepository.repository) {
+            UserRepository.repository = new UserRepository();
         }
-        return Repository.repository;
+        return UserRepository.repository;
     }
 
     createUser = async (user: PublicUser): Promise<string> => {

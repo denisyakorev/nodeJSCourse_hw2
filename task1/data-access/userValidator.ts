@@ -7,7 +7,8 @@ export const userValidator = async (req: Request, res: Response, next: NextFunct
         if(!req.body) throw new Error('Empty body');
         const user = await userScheme.validateAsync(req.body);
         if(user.errors) throw new Error(JSON.stringify(user.errors));
-        next(user);
+        req.body = user;
+        next();
     } catch(error) {
         res.status(400);
         res.send((error as Error).message);
