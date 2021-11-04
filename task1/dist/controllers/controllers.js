@@ -52,6 +52,8 @@ var repository_1 = require("../repository");
 var validators_1 = require("./validators");
 var repository = repository_1.Repository.createRepository();
 var homepage = function (req, res) {
+    console.log(req.headers.cookie);
+    console.log('path', req.path);
     res.send("Please, use /user route");
 };
 exports.homepage = homepage;
