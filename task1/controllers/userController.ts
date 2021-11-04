@@ -1,7 +1,9 @@
 import {Request, Response} from "express";
 import {userService, UserServiceError} from "../services";
+import {UserPSQLRepository} from "../repositories/userRepository/userPSQLRepository";
+import {IRepository} from "../repositories/userRepository/userRepositoryInterface";
 
-const service = new userService();
+const service = new userService(UserPSQLRepository.createRepository() as IRepository);
 
 export type ViewHandler = (req: Request, res: Response) => void;
 
@@ -25,7 +27,8 @@ export const getAutoSuggestUsers: ViewHandler = async (req, res) => {
     const loginSubstring = req.query.loginSubstring?.toString();
     const limit = req.query.limit ? parseInt(req.query.limit.toString()) : 0;
     try {
-        return await service.getAutoSuggest(loginSubstring, limit);
+        const result = await service.getAutoSuggest(loginSubstring, limit);
+        res.json(result);
     } catch (e) {
         res.status(500);
     } finally {

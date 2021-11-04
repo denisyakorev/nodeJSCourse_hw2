@@ -49,7 +49,8 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.deleteUser = exports.updateUser = exports.addUser = exports.getAutoSuggestUsers = exports.getUser = void 0;
 var services_1 = require("../services");
-var service = new services_1.userService();
+var userPSQLRepository_1 = require("../repositories/userRepository/userPSQLRepository");
+var service = new services_1.userService(userPSQLRepository_1.UserPSQLRepository.createRepository());
 var getUser = function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
     var id, user, e_1;
     return __generator(this, function (_a) {
@@ -82,7 +83,7 @@ var getUser = function (req, res) { return __awaiter(void 0, void 0, void 0, fun
 }); };
 exports.getUser = getUser;
 var getAutoSuggestUsers = function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
-    var loginSubstring, limit, e_2;
+    var loginSubstring, limit, result, e_2;
     var _a;
     return __generator(this, function (_b) {
         switch (_b.label) {
@@ -93,7 +94,10 @@ var getAutoSuggestUsers = function (req, res) { return __awaiter(void 0, void 0,
             case 1:
                 _b.trys.push([1, 3, 4, 5]);
                 return [4 /*yield*/, service.getAutoSuggest(loginSubstring, limit)];
-            case 2: return [2 /*return*/, _b.sent()];
+            case 2:
+                result = _b.sent();
+                res.json(result);
+                return [3 /*break*/, 5];
             case 3:
                 e_2 = _b.sent();
                 res.status(500);

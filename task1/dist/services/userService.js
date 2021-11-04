@@ -52,7 +52,6 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.userService = exports.UserServiceError = void 0;
-var userRepository_1 = require("../repositories/userRepository");
 var UserServiceError = /** @class */ (function (_super) {
     __extends(UserServiceError, _super);
     function UserServiceError(message, isClientDataIncorrect) {
@@ -65,7 +64,7 @@ var UserServiceError = /** @class */ (function (_super) {
 }(Error));
 exports.UserServiceError = UserServiceError;
 var userService = /** @class */ (function () {
-    function userService() {
+    function userService(repository) {
         var _this = this;
         this.isLoginExists = function (login) { return __awaiter(_this, void 0, void 0, function () {
             return __generator(this, function (_a) {
@@ -75,10 +74,24 @@ var userService = /** @class */ (function () {
                 }
             });
         }); };
-        this.getUser = function (userId) { return __awaiter(_this, void 0, void 0, function () {
+        this.getExistingUser = function (userId) { return __awaiter(_this, void 0, void 0, function () {
+            var existingUser;
             return __generator(this, function (_a) {
                 switch (_a.label) {
                     case 0: return [4 /*yield*/, this.repository.getUser(userId)];
+                    case 1:
+                        existingUser = _a.sent();
+                        if (!existingUser) {
+                            throw new UserServiceError('There is no user with such id', true);
+                        }
+                        return [2 /*return*/, existingUser];
+                }
+            });
+        }); };
+        this.getUser = function (userId) { return __awaiter(_this, void 0, void 0, function () {
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0: return [4 /*yield*/, this.getExistingUser(userId)];
                     case 1: return [2 /*return*/, _a.sent()];
                 }
             });
@@ -110,12 +123,9 @@ var userService = /** @class */ (function () {
             var existingUser, _a;
             return __generator(this, function (_b) {
                 switch (_b.label) {
-                    case 0: return [4 /*yield*/, this.repository.getUser(user.id)];
+                    case 0: return [4 /*yield*/, this.getExistingUser(user.id)];
                     case 1:
                         existingUser = _b.sent();
-                        if (!existingUser) {
-                            throw new UserServiceError('There is no user with such id', true);
-                        }
                         _a = existingUser.login !== user.login;
                         if (!_a) return [3 /*break*/, 3];
                         return [4 /*yield*/, this.isLoginExists(user.login)];
@@ -132,14 +142,18 @@ var userService = /** @class */ (function () {
             });
         }); };
         this.deleteUser = function (userId) { return __awaiter(_this, void 0, void 0, function () {
+            var existingUser;
             return __generator(this, function (_a) {
                 switch (_a.label) {
-                    case 0: return [4 /*yield*/, this.repository.deleteUser(userId)];
-                    case 1: return [2 /*return*/, _a.sent()];
+                    case 0: return [4 /*yield*/, this.getExistingUser(userId)];
+                    case 1:
+                        existingUser = _a.sent();
+                        return [4 /*yield*/, this.repository.deleteUser(existingUser.id)];
+                    case 2: return [2 /*return*/, _a.sent()];
                 }
             });
         }); };
-        this.repository = userRepository_1.UserRepository.createRepository();
+        this.repository = repository;
     }
     return userService;
 }());

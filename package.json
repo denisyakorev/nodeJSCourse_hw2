@@ -7,7 +7,7 @@
     "test": "jest",
     "build": "tsc --outDir ./task1/dist",
     "prestart": "npm run build",
-    "start": "node task1/dist/server"
+    "start": "cross-env PSQLConnectionString=postgres://Denis_Iakorev:@localhost:5432/Denis_Iakorev node task1/dist/server"
   },
   "repository": {
     "type": "git",
@@ -21,6 +21,7 @@
   "homepage": "https://github.com/denisyakorev/nodeJSCourse_hw2#readme",
   "dependencies": {
     "babel": "^6.23.0",
+    "cross-env": "^7.0.3",
     "dotenv": "^10.0.0",
     "eslint": "^8.0.1",
     "express": "^4.17.1",

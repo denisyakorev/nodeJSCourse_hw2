@@ -1,7 +1,6 @@
 import {NextFunction, Response, Request} from "express";
 import { userRouter } from "./routers";
 
-require('dotenv').load();
 const express = require('express');
 const app = express();
 const port = 3000;

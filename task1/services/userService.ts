@@ -11,8 +11,8 @@ export class UserServiceError extends Error {
 export class userService {
     private repository: IRepository;
 
-    constructor() {
-        this.repository = UserInMemoryRepository.createRepository() as IRepository;
+    constructor(repository: IRepository) {
+        this.repository = repository;
     }
 
     private isLoginExists = async (login: string): Promise<boolean> => {

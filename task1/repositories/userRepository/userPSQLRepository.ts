@@ -13,7 +13,7 @@ export class UserPSQLRepository implements IRepository {
         if (!UserPSQLRepository.repository) {
             UserPSQLRepository.repository = new UserPSQLRepository();
         }
-        return UserPSQLRepository.repository;
+        return UserPSQLRepository.repository as IRepository;
     }
 
     constructor () {
@@ -63,22 +63,26 @@ export class UserPSQLRepository implements IRepository {
         const user = await UserModel.findOne({
             where: {
                 login: {
-                    [Op.like]: login
+                    [Op.in]: [login]
                 },
             },
         });
-        return user !== undefined;
+        return !!user;
     }
 
     updateUser = async (user: Omit<User, "isDeleted">): Promise<User | Omit<User, "isDeleted">> => {
-        const updatedUsers = await UserModel.update({...user}, {
+        const updatedUsers = await UserModel.update({
+            login: user.login,
+            password: user.password,
+            age: user.age
+        }, {
             where: {
                 id: {
-                    [Op.like]: user.id,
+                    [Op.in]: [user.id],
                 },
             },
         });
-
-        return updatedUsers[1][0];
+        const updatedUser =  await this.getUser(user.id);
+        return updatedUser ? updatedUser : user;
     }
 }

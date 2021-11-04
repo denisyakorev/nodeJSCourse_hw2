@@ -4,9 +4,9 @@ import {userValidator} from "../data-access/userValidator";
 
 export const userRouter = express.Router();
 
-userRouter.get('/:id', getUser);
-
 userRouter.get('/autosuggest', getAutoSuggestUsers);
+
+userRouter.get('/:id', getUser);
 
 userRouter.post('/', userValidator, addUser);
 
