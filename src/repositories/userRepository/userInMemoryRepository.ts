@@ -1,5 +1,6 @@
-import { User } from "../../types";
+
 import { v4 as uuidv4 } from 'uuid';
+import { User } from '../../models';
 import {IRepository, PublicUser} from "./userRepositoryInterface";
 
 export class UserInMemoryRepository implements IRepository {

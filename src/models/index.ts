@@ -1,1 +1,1 @@
-export * from './UserSequelizeModel';
+export * from './UserModel';

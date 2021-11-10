@@ -1,15 +1,14 @@
 import {DataTypes, Model, ModelDefined, Optional, Sequelize} from "sequelize";
-import {User} from "../types";
 
 export const sequelize = new Sequelize(process.env.PSQLConnectionString as string);
 
-// export class UserModel extends Model<User, Optional<User, 'id' | 'isDeleted'>> implements User{
-//     public id!: string;
-//     public login!: string;
-//     public password!: string;
-//     public age!: number;
-//     public isDeleted!: boolean;
-// };
+export type User = {
+    id: string;
+    login: string;
+    password: string;
+    age: number;
+    isDeleted: boolean;
+};
 
 interface UserInterface extends Model<User, Optional<User, 'id' | 'isDeleted'>>, User {};
 

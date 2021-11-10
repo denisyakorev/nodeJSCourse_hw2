@@ -1,6 +1,6 @@
-import {UserInMemoryRepository} from "../repositories/userRepository/userInMemoryRepository";
+import { User } from "../models";
 import {IRepository, PublicUser} from "../repositories/userRepository/userRepositoryInterface";
-import {User} from "../types";
+
 
 export class UserServiceError extends Error {
     constructor(public message: string, public isClientDataIncorrect: boolean) {
