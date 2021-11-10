@@ -1,9 +1,41 @@
 import {IRepository, PublicUser} from "./userRepositoryInterface";
-import {Op, Sequelize} from "sequelize";
-import {User, UserModel } from "../../models";
+import {DataTypes, Model, Op, Optional, Sequelize} from "sequelize";
+import {User} from "../../models";
 
 
 export const sequelize = new Sequelize(process.env.PSQLConnectionString as string);
+
+interface UserInterface extends Model<User, Optional<User, 'id' | 'isDeleted'>>, User {};
+
+export const UserModel = sequelize.define<UserInterface>('User', {
+    id: {
+        type: DataTypes.UUIDV4,
+        defaultValue: DataTypes.UUIDV4,
+        primaryKey: true,
+    },
+    login: {
+        type: DataTypes.STRING,
+        allowNull: false,
+        unique: true,
+    },
+    password: {
+        type: DataTypes.STRING,
+        allowNull: false,
+    },
+    age: {
+        type: DataTypes.INTEGER,
+        allowNull: false
+    },
+    isDeleted: {
+        type: DataTypes.BOOLEAN,
+        allowNull: false,
+        defaultValue: false,
+    },
+},{
+    tableName: 'Users',
+    indexes: [{fields: ['id', 'login']}],
+    timestamps: false,
+});
 
 export class UserPSQLRepository implements IRepository {
     private storage: Sequelize;

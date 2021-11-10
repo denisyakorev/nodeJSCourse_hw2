@@ -2,10 +2,9 @@ import {Request, Response} from "express";
 import {userService, UserServiceError} from "../services";
 import {UserPSQLRepository} from "../repositories/userRepository/userPSQLRepository";
 import {IRepository} from "../repositories/userRepository/userRepositoryInterface";
+import { ViewHandler } from "./types";
 
 const service = new userService(UserPSQLRepository.createRepository() as IRepository);
-
-export type ViewHandler = (req: Request, res: Response) => void;
 
 export const getUser: ViewHandler = async (req, res) => {
   const id = req.params.id;

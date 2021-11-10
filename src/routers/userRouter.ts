@@ -8,8 +8,8 @@ userRouter.get('/autosuggest', getAutoSuggestUsers);
 
 userRouter.get('/:id', getUser);
 
-userRouter.post('/', userValidator, addUser);
-
 userRouter.put('/:id', userValidator, updateUser);
 
 userRouter.delete('/:id', deleteUser);
+
+userRouter.post('/', userValidator, addUser);

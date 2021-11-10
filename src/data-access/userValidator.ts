@@ -1,19 +1,10 @@
 import Joi from "joi";
 import passwordComplexity from "joi-password-complexity";
 import {NextFunction, Request, Response} from "express";
+import {genericValidator} from "./utils";
 
 export const userValidator = async (req: Request, res: Response, next: NextFunction) => {
-    try {
-        if(!req.body) throw new Error('Empty body');
-        const user = await userScheme.validateAsync(req.body);
-        if(user.errors) throw new Error(JSON.stringify(user.errors));
-        req.body = user;
-        next();
-    } catch(error) {
-        res.status(400);
-        res.send((error as Error).message);
-        res.end();
-    }
+    genericValidator(req, res, next, userScheme);
 };
 
 const passwordConfig = {
