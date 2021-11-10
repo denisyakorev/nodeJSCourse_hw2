@@ -1,4 +1,4 @@
-import {IRepository, PublicUser} from "./userRepositoryInterface";
+import {IUserRepository, PublicUser} from "./userRepositoryInterface";
 import {DataTypes, Model, Op, Optional, Sequelize} from "sequelize";
 import {User} from "../../models";
 
@@ -37,15 +37,15 @@ export const UserModel = sequelize.define<UserInterface>('User', {
     timestamps: false,
 });
 
-export class UserPSQLRepository implements IRepository {
+export class UserPSQLRepository implements IUserRepository {
     private storage: Sequelize;
 
-    private static repository?: IRepository
+    private static repository?: IUserRepository
     public static createRepository = () => {
         if (!UserPSQLRepository.repository) {
             UserPSQLRepository.repository = new UserPSQLRepository();
         }
-        return UserPSQLRepository.repository as IRepository;
+        return UserPSQLRepository.repository as IUserRepository;
     }
 
     constructor () {

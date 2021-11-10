@@ -1,17 +1,11 @@
+import { ServiceError } from ".";
 import { User } from "../models";
-import {IRepository, PublicUser} from "../repositories/userRepository/userRepositoryInterface";
-
-
-export class UserServiceError extends Error {
-    constructor(public message: string, public isClientDataIncorrect: boolean) {
-        super(message);
-    }
-}
+import {IUserRepository, PublicUser} from "../repositories/userRepository/userRepositoryInterface";
 
 export class userService {
-    private repository: IRepository;
+    private repository: IUserRepository;
 
-    constructor(repository: IRepository) {
+    constructor(repository: IUserRepository) {
         this.repository = repository;
     }
 
@@ -22,7 +16,7 @@ export class userService {
     private getExistingUser = async (userId: string): Promise<User> => {
         const existingUser = await this.repository.getUser(userId);
         if (!existingUser) {
-            throw new UserServiceError('There is no user with such id', true);
+            throw new ServiceError('There is no user with such id', true);
         }
         return existingUser
     };
@@ -41,7 +35,7 @@ export class userService {
 
     createUser = async (user: PublicUser): Promise<string> => {
         if (await this.isLoginExists(user.login)) {
-           throw new UserServiceError('Login already exists', true);
+           throw new ServiceError('Login already exists', true);
         }
         return this.repository.createUser(user);
     };
@@ -49,7 +43,7 @@ export class userService {
     updateUser = async (user: Omit<User, "isDeleted">): Promise<User | Omit<User, "isDeleted">> => {
         const existingUser = await this.getExistingUser(user.id);
         if (existingUser.login !== user.login && await this.isLoginExists(user.login)) {
-            throw new UserServiceError('Login already exists', true);
+            throw new ServiceError('Login already exists', true);
         }
         return await this.repository.updateUser(user);
     };

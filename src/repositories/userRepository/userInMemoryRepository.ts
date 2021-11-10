@@ -1,12 +1,12 @@
 
 import { v4 as uuidv4 } from 'uuid';
 import { User } from '../../models';
-import {IRepository, PublicUser} from "./userRepositoryInterface";
+import {IUserRepository, PublicUser} from "./userRepositoryInterface";
 
-export class UserInMemoryRepository implements IRepository {
+export class UserInMemoryRepository implements IUserRepository {
     users: User[] = [];
 
-    private static repository?: IRepository
+    private static repository?: IUserRepository
     public static createRepository = () => {
         if (!UserInMemoryRepository.repository) {
             UserInMemoryRepository.repository = new UserInMemoryRepository();

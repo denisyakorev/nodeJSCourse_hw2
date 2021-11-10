@@ -1,10 +1,9 @@
-import {Request, Response} from "express";
-import {userService, UserServiceError} from "../services";
+import {userService, ServiceError} from "../services";
 import {UserPSQLRepository} from "../repositories/userRepository/userPSQLRepository";
-import {IRepository} from "../repositories/userRepository/userRepositoryInterface";
+import {IUserRepository} from "../repositories/userRepository/userRepositoryInterface";
 import { ViewHandler } from "./types";
 
-const service = new userService(UserPSQLRepository.createRepository() as IRepository);
+const service = new userService(UserPSQLRepository.createRepository() as IUserRepository);
 
 export const getUser: ViewHandler = async (req, res) => {
   const id = req.params.id;
@@ -41,7 +40,7 @@ export const addUser: ViewHandler = async (req, res) => {
         res.status(201);
         res.send(id);
     }catch(error) {
-        if ((error as UserServiceError).isClientDataIncorrect) {
+        if ((error as ServiceError).isClientDataIncorrect) {
             res.status(400);
         } else {
             res.status(500);
@@ -56,7 +55,7 @@ export const updateUser: ViewHandler = async (req, res) => {
         const updatedUser = await service.updateUser({...req.body, id: req.params.id});
         res.send(updatedUser);
     } catch(error) {
-        if ((error as UserServiceError).isClientDataIncorrect) {
+        if ((error as ServiceError).isClientDataIncorrect) {
             res.status(400);
         } else {
             res.status(500);
