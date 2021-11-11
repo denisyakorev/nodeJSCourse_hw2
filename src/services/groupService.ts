@@ -1,3 +1,4 @@
+import { ServiceError } from ".";
 import {Group, Permissions} from "../models";
 import { IGroupRepository } from "../repositories/groupRepository";
 
@@ -8,40 +9,39 @@ export class groupService {
         this.repository = repository;
     }
 
-    // TODO
-    getGroup = async (groupId: string): Promise<Group> => {
-        return Promise.resolve({
-            id: '1',
-            name: 'group1',
-            permissions: ['READ'] as unknown as typeof Permissions[number],
-        } as Group);
+    getExistingGroup = async (groupId: string): Promise<Group> => {
+        const existingGroup = await this.repository.getGroup(groupId);
+        if (!existingGroup) {
+            throw new ServiceError('There is no group with such id', true);            
+        }
+        return existingGroup
     };
 
-    // TODO
+    getGroup = async (groupId: string): Promise<Group | undefined> => {
+        return await this.getExistingGroup(groupId);
+    };
+
     getGroups = async (): Promise<Group[]> => {
-        return Promise.resolve([] as Group[]);
+        return this.repository.getGroups();
     };
 
-    // TODO
     createGroup = async (group: Omit<Group, 'id'>): Promise<Group> => {
-        return Promise.resolve({
-            id: '1',
-            name: 'group1',
-            permissions: ['READ'] as unknown as typeof Permissions[number],
-        } as Group);
+        if (await this.repository.isNameExists(group.name)) {
+            throw new ServiceError('Group with this name already exists', true);
+        }
+        return this.repository.createGroup(group);
     };
 
-    // TODO
     updateGroup = async (group: Group): Promise<Group> => {
-       return Promise.resolve({
-           id: '1',
-           name: 'group1',
-           permissions: ['READ'] as unknown as typeof Permissions[number],
-       } as Group);
+        const existingGroup = await this.getExistingGroup(group.id);
+        if (existingGroup.name !== group.name && await this.repository.isNameExists(group.name)) {
+            throw new ServiceError('Login already exists', true);
+        }
+        return await this.repository.updateGroup(group);
     };
 
-    // TODO
     deleteGroup = async (groupId: string): Promise<boolean> => {
-        return Promise.resolve(false);
+        const existingGroup = await this.getExistingGroup(groupId);
+        return await this.repository.deleteGroup(existingGroup.id);
     };
 }
