@@ -103,7 +103,7 @@ export class UserPSQLRepository implements IUserRepository {
     }
 
     updateUser = async (user: Omit<User, "isDeleted">): Promise<User | Omit<User, "isDeleted">> => {
-        const updatedUsers = await UserModel.update({
+        await UserModel.update({
             login: user.login,
             password: user.password,
             age: user.age
