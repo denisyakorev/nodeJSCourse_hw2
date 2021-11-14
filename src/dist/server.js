@@ -6,6 +6,7 @@ var app = express();
 var port = 3000;
 app.use(express.json());
 app.use('/user', routers_1.userRouter);
+app.use('/group', routers_1.groupRouter);
 app.use(function errorHandler(err, req, res, next) {
     console.log(err.stack);
     if (res.headersSent) {

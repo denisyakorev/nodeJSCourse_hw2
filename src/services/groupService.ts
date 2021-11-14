@@ -1,5 +1,5 @@
 import { ServiceError } from ".";
-import {Group, Permissions} from "../models";
+import {Group} from "../models";
 import { IGroupRepository } from "../repositories/groupRepository";
 
 export class groupService {
@@ -25,7 +25,7 @@ export class groupService {
         return this.repository.getGroups();
     };
 
-    createGroup = async (group: Omit<Group, 'id'>): Promise<Group> => {
+    createGroup = async (group: Omit<Group, 'id'>): Promise<string> => {
         if (await this.repository.isNameExists(group.name)) {
             throw new ServiceError('Group with this name already exists', true);
         }
@@ -43,5 +43,9 @@ export class groupService {
     deleteGroup = async (groupId: string): Promise<boolean> => {
         const existingGroup = await this.getExistingGroup(groupId);
         return await this.repository.deleteGroup(existingGroup.id);
+    };
+
+    addUsersToGroup = async (groupId: string, userIds: string[]): Promise<boolean> => {
+      return await this.repository.addUsersToGroup(groupId, userIds);
     };
 }

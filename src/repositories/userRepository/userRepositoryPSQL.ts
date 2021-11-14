@@ -1,51 +1,19 @@
 import {IUserRepository, PublicUser} from "./userRepositoryInterface";
-import {DataTypes, Model, Op, Optional, Sequelize} from "sequelize";
+import {Op, Sequelize} from "sequelize";
 import {User} from "../../models";
-
+import { UserModel } from "../sequelizeModels";
 
 export const sequelize = new Sequelize(process.env.PSQLConnectionString as string);
 
-interface UserInterface extends Model<User, Optional<User, 'id' | 'isDeleted'>>, User {};
-
-export const UserModel = sequelize.define<UserInterface>('User', {
-    id: {
-        type: DataTypes.UUIDV4,
-        defaultValue: DataTypes.UUIDV4,
-        primaryKey: true,
-    },
-    login: {
-        type: DataTypes.STRING,
-        allowNull: false,
-        unique: true,
-    },
-    password: {
-        type: DataTypes.STRING,
-        allowNull: false,
-    },
-    age: {
-        type: DataTypes.INTEGER,
-        allowNull: false
-    },
-    isDeleted: {
-        type: DataTypes.BOOLEAN,
-        allowNull: false,
-        defaultValue: false,
-    },
-},{
-    tableName: 'Users',
-    indexes: [{fields: ['id', 'login']}],
-    timestamps: false,
-});
-
-export class UserPSQLRepository implements IUserRepository {
+export class UserRepositoryPSQL implements IUserRepository {
     private storage: Sequelize;
 
     private static repository?: IUserRepository
     public static createRepository = () => {
-        if (!UserPSQLRepository.repository) {
-            UserPSQLRepository.repository = new UserPSQLRepository();
+        if (!UserRepositoryPSQL.repository) {
+            UserRepositoryPSQL.repository = new UserRepositoryPSQL();
         }
-        return UserPSQLRepository.repository as IUserRepository;
+        return UserRepositoryPSQL.repository as IUserRepository;
     }
 
     constructor () {

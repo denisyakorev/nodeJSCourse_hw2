@@ -39,25 +39,16 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.userValidator = void 0;
-var joi_1 = __importDefault(require("joi"));
-var joi_password_complexity_1 = __importDefault(require("joi-password-complexity"));
+exports.groupUsersValidator = void 0;
 var utils_1 = require("./utils");
-var userValidator = function (req, res, next) { return __awaiter(void 0, void 0, void 0, function () {
+var joi_1 = __importDefault(require("joi"));
+var groupUsersValidator = function (req, res, next) { return __awaiter(void 0, void 0, void 0, function () {
     return __generator(this, function (_a) {
-        (0, utils_1.genericValidator)(req, res, next, userScheme);
+        (0, utils_1.genericValidator)(req, res, next, groupUsersScheme);
         return [2 /*return*/];
     });
 }); };
-exports.userValidator = userValidator;
-var passwordConfig = {
-    min: 2,
-    max: 20,
-    numeric: 1,
-    lowerCase: 1
-};
-var userScheme = joi_1.default.object({
-    login: joi_1.default.string().required(),
-    password: (0, joi_password_complexity_1.default)(passwordConfig),
-    age: joi_1.default.number().min(4).max(130).required()
+exports.groupUsersValidator = groupUsersValidator;
+var groupUsersScheme = joi_1.default.object({
+    userIds: joi_1.default.array().items(joi_1.default.string()),
 });

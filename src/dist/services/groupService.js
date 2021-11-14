@@ -36,74 +36,60 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
     }
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.userService = void 0;
+exports.groupService = void 0;
 var _1 = require(".");
-var userService = /** @class */ (function () {
-    function userService(repository) {
+var groupService = /** @class */ (function () {
+    function groupService(repository) {
         var _this = this;
-        this.isLoginExists = function (login) { return __awaiter(_this, void 0, void 0, function () {
+        this.getExistingGroup = function (groupId) { return __awaiter(_this, void 0, void 0, function () {
+            var existingGroup;
             return __generator(this, function (_a) {
                 switch (_a.label) {
-                    case 0: return [4 /*yield*/, this.repository.isLoginExists(login)];
-                    case 1: return [2 /*return*/, _a.sent()];
-                }
-            });
-        }); };
-        this.getExistingUser = function (userId) { return __awaiter(_this, void 0, void 0, function () {
-            var existingUser;
-            return __generator(this, function (_a) {
-                switch (_a.label) {
-                    case 0: return [4 /*yield*/, this.repository.getUser(userId)];
+                    case 0: return [4 /*yield*/, this.repository.getGroup(groupId)];
                     case 1:
-                        existingUser = _a.sent();
-                        if (!existingUser) {
-                            throw new _1.ServiceError('There is no user with such id', true);
+                        existingGroup = _a.sent();
+                        if (!existingGroup) {
+                            throw new _1.ServiceError('There is no group with such id', true);
                         }
-                        return [2 /*return*/, existingUser];
+                        return [2 /*return*/, existingGroup];
                 }
             });
         }); };
-        this.getUser = function (userId) { return __awaiter(_this, void 0, void 0, function () {
+        this.getGroup = function (groupId) { return __awaiter(_this, void 0, void 0, function () {
             return __generator(this, function (_a) {
                 switch (_a.label) {
-                    case 0: return [4 /*yield*/, this.getExistingUser(userId)];
+                    case 0: return [4 /*yield*/, this.getExistingGroup(groupId)];
                     case 1: return [2 /*return*/, _a.sent()];
                 }
             });
         }); };
-        this.getAutoSuggest = function (loginSubstring, limit) { return __awaiter(_this, void 0, void 0, function () {
+        this.getGroups = function () { return __awaiter(_this, void 0, void 0, function () {
             return __generator(this, function (_a) {
-                switch (_a.label) {
-                    case 0:
-                        if (!(loginSubstring && limit)) return [3 /*break*/, 2];
-                        return [4 /*yield*/, this.repository.getAutoSuggestUsers(loginSubstring, limit)];
-                    case 1: return [2 /*return*/, _a.sent()];
-                    case 2: return [2 /*return*/, []];
-                }
+                return [2 /*return*/, this.repository.getGroups()];
             });
         }); };
-        this.createUser = function (user) { return __awaiter(_this, void 0, void 0, function () {
+        this.createGroup = function (group) { return __awaiter(_this, void 0, void 0, function () {
             return __generator(this, function (_a) {
                 switch (_a.label) {
-                    case 0: return [4 /*yield*/, this.isLoginExists(user.login)];
+                    case 0: return [4 /*yield*/, this.repository.isNameExists(group.name)];
                     case 1:
                         if (_a.sent()) {
-                            throw new _1.ServiceError('Login already exists', true);
+                            throw new _1.ServiceError('Group with this name already exists', true);
                         }
-                        return [2 /*return*/, this.repository.createUser(user)];
+                        return [2 /*return*/, this.repository.createGroup(group)];
                 }
             });
         }); };
-        this.updateUser = function (user) { return __awaiter(_this, void 0, void 0, function () {
-            var existingUser, _a;
+        this.updateGroup = function (group) { return __awaiter(_this, void 0, void 0, function () {
+            var existingGroup, _a;
             return __generator(this, function (_b) {
                 switch (_b.label) {
-                    case 0: return [4 /*yield*/, this.getExistingUser(user.id)];
+                    case 0: return [4 /*yield*/, this.getExistingGroup(group.id)];
                     case 1:
-                        existingUser = _b.sent();
-                        _a = existingUser.login !== user.login;
+                        existingGroup = _b.sent();
+                        _a = existingGroup.name !== group.name;
                         if (!_a) return [3 /*break*/, 3];
-                        return [4 /*yield*/, this.isLoginExists(user.login)];
+                        return [4 /*yield*/, this.repository.isNameExists(group.name)];
                     case 2:
                         _a = (_b.sent());
                         _b.label = 3;
@@ -111,26 +97,33 @@ var userService = /** @class */ (function () {
                         if (_a) {
                             throw new _1.ServiceError('Login already exists', true);
                         }
-                        return [4 /*yield*/, this.repository.updateUser(user)];
+                        return [4 /*yield*/, this.repository.updateGroup(group)];
                     case 4: return [2 /*return*/, _b.sent()];
                 }
             });
         }); };
-        this.deleteUser = function (userId) { return __awaiter(_this, void 0, void 0, function () {
-            var existingUser;
+        this.deleteGroup = function (groupId) { return __awaiter(_this, void 0, void 0, function () {
+            var existingGroup;
             return __generator(this, function (_a) {
                 switch (_a.label) {
-                    case 0: return [4 /*yield*/, this.getExistingUser(userId)];
+                    case 0: return [4 /*yield*/, this.getExistingGroup(groupId)];
                     case 1:
-                        existingUser = _a.sent();
-                        return [4 /*yield*/, this.repository.deleteUser(existingUser.id)];
+                        existingGroup = _a.sent();
+                        return [4 /*yield*/, this.repository.deleteGroup(existingGroup.id)];
                     case 2: return [2 /*return*/, _a.sent()];
+                }
+            });
+        }); };
+        this.addUsersToGroup = function (groupId, userIds) { return __awaiter(_this, void 0, void 0, function () {
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0: return [4 /*yield*/, this.repository.addUsersToGroup(groupId, userIds)];
+                    case 1: return [2 /*return*/, _a.sent()];
                 }
             });
         }); };
         this.repository = repository;
     }
-    return userService;
+    return groupService;
 }());
-exports.userService = userService;
-;
+exports.groupService = groupService;

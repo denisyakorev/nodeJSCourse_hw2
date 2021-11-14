@@ -1,9 +1,9 @@
 import {userService, ServiceError} from "../services";
-import {UserPSQLRepository} from "../repositories/userRepository/userPSQLRepository";
+import {UserRepositoryPSQL} from "../repositories/userRepository/userRepositoryPSQL";
 import {IUserRepository} from "../repositories/userRepository/userRepositoryInterface";
 import { ViewHandler } from "./types";
 
-const service = new userService(UserPSQLRepository.createRepository() as IUserRepository);
+const service = new userService(UserRepositoryPSQL.createRepository() as IUserRepository);
 
 export const getUser: ViewHandler = async (req, res) => {
   const id = req.params.id;

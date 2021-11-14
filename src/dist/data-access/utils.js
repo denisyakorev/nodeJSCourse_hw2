@@ -35,29 +35,32 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
         if (op[0] & 5) throw op[1]; return { value: op[0] ? op[1] : void 0, done: true };
     }
 };
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-};
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.userValidator = void 0;
-var joi_1 = __importDefault(require("joi"));
-var joi_password_complexity_1 = __importDefault(require("joi-password-complexity"));
-var utils_1 = require("./utils");
-var userValidator = function (req, res, next) { return __awaiter(void 0, void 0, void 0, function () {
+exports.genericValidator = void 0;
+var genericValidator = function (req, res, next, joiScheme) { return __awaiter(void 0, void 0, void 0, function () {
+    var validatedObj, error_1;
     return __generator(this, function (_a) {
-        (0, utils_1.genericValidator)(req, res, next, userScheme);
-        return [2 /*return*/];
+        switch (_a.label) {
+            case 0:
+                _a.trys.push([0, 2, , 3]);
+                if (!req.body)
+                    throw new Error('Empty body');
+                return [4 /*yield*/, joiScheme.validateAsync(req.body)];
+            case 1:
+                validatedObj = _a.sent();
+                if (validatedObj.errors)
+                    throw new Error(JSON.stringify(validatedObj.errors));
+                req.body = validatedObj;
+                next();
+                return [3 /*break*/, 3];
+            case 2:
+                error_1 = _a.sent();
+                res.status(400);
+                res.send(error_1.message);
+                res.end();
+                return [3 /*break*/, 3];
+            case 3: return [2 /*return*/];
+        }
     });
 }); };
-exports.userValidator = userValidator;
-var passwordConfig = {
-    min: 2,
-    max: 20,
-    numeric: 1,
-    lowerCase: 1
-};
-var userScheme = joi_1.default.object({
-    login: joi_1.default.string().required(),
-    password: (0, joi_password_complexity_1.default)(passwordConfig),
-    age: joi_1.default.number().min(4).max(130).required()
-});
+exports.genericValidator = genericValidator;

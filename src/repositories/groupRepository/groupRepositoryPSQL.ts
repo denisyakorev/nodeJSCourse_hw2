@@ -1,32 +1,11 @@
 import { IGroupRepository } from ".";
-import {DataTypes, Model, Op, Optional, Sequelize} from "sequelize";
-import {Group, Permissions} from "../../models";
+import {Op, Sequelize} from "sequelize";
+import {Group} from "../../models";
+import {GroupModel, GroupUser} from "../sequelizeModels";
 
 export const sequelize = new Sequelize(process.env.PSQLConnectionString as string);
 
-interface GroupInterface extends Model<Group, Optional<Group, 'id'>>, Group {};
 
-export const GroupModel = sequelize.define<GroupInterface>('Group', {
-    id: {
-        type: DataTypes.UUIDV4,
-        defaultValue: DataTypes.UUIDV4,
-        primaryKey: true,
-    },
-    name: {
-        type: DataTypes.STRING,
-        allowNull: false,
-        unique: true,
-    },
-    permissions: {
-        type: DataTypes.ARRAY(DataTypes.ENUM({
-            values: [...Permissions],
-        })),
-    }
-}, {
-    tableName: 'Groups',
-    indexes: [{fields: ['id', 'name']}],
-    timestamps: false,
-});
 
 export class GroupPSQLRepository implements IGroupRepository {
     private storage: Sequelize;
@@ -103,4 +82,21 @@ export class GroupPSQLRepository implements IGroupRepository {
             return false;
         }
     };
+
+    addUsersToGroup = async (groupId: string, userIds: string[]): Promise<boolean> => {
+        try{
+            await sequelize.transaction(async (t) => {
+                userIds.forEach( async (userId) => {
+                    await GroupUser.create({
+                        GroupId: groupId,
+                        UserId: userId
+                    })
+                });
+            });
+            return true;
+        } catch (error) {
+            console.log(error);
+            return false;
+        }
+    }
 };

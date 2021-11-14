@@ -7,4 +7,5 @@ export type IGroupRepository = {
     createGroup: (group: Omit<Group, 'id'>) => Promise<string>;
     updateGroup: (group: Group) => Promise<Group>;
     deleteGroup: (groupId: string) => Promise<boolean>;
+    addUsersToGroup: (groupId: string, userIds: string[]) => Promise<boolean>;
 };

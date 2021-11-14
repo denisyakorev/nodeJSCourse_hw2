@@ -67,3 +67,18 @@ export const deleteGroup: ViewHandler = async (req, res) => {
         res.end();
     }
 };
+
+export const addUsersToGroup: ViewHandler = async (req, res) => {
+    try {
+        const updatedGroup = await service.addUsersToGroup(req.params.id, req.body.userIds);
+        res.send(updatedGroup);
+    } catch(error) {
+        if ((error as ServiceError).isClientDataIncorrect) {
+            res.status(400);
+        } else {
+            res.status(500);
+        }
+        res.send((error as Error).toString());
+    }
+    res.end();
+}

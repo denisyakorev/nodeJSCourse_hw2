@@ -47,12 +47,12 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
     }
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.deleteUser = exports.updateUser = exports.addUser = exports.getAutoSuggestUsers = exports.getUser = void 0;
+exports.addUsersToGroup = exports.deleteGroup = exports.updateGroup = exports.addGroup = exports.getGroups = exports.getGroup = void 0;
+var groupRepository_1 = require("../repositories/groupRepository");
 var services_1 = require("../services");
-var userRepositoryPSQL_1 = require("../repositories/userRepository/userRepositoryPSQL");
-var service = new services_1.userService(userRepositoryPSQL_1.UserRepositoryPSQL.createRepository());
-var getUser = function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
-    var id, user, e_1;
+var service = new services_1.groupService(groupRepository_1.GroupPSQLRepository.createRepository());
+var getGroup = function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
+    var id, group, e_1;
     return __generator(this, function (_a) {
         switch (_a.label) {
             case 0:
@@ -60,11 +60,11 @@ var getUser = function (req, res) { return __awaiter(void 0, void 0, void 0, fun
                 _a.label = 1;
             case 1:
                 _a.trys.push([1, 3, 4, 5]);
-                return [4 /*yield*/, service.getUser(id)];
+                return [4 /*yield*/, service.getGroup(id)];
             case 2:
-                user = _a.sent();
-                if (user) {
-                    res.json(user);
+                group = _a.sent();
+                if (group) {
+                    res.json(group);
                 }
                 else {
                     res.status(404);
@@ -81,42 +81,23 @@ var getUser = function (req, res) { return __awaiter(void 0, void 0, void 0, fun
         }
     });
 }); };
-exports.getUser = getUser;
-var getAutoSuggestUsers = function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
-    var loginSubstring, limit, result, e_2;
-    var _a;
-    return __generator(this, function (_b) {
-        switch (_b.label) {
-            case 0:
-                loginSubstring = (_a = req.query.loginSubstring) === null || _a === void 0 ? void 0 : _a.toString();
-                limit = req.query.limit ? parseInt(req.query.limit.toString()) : 0;
-                _b.label = 1;
-            case 1:
-                _b.trys.push([1, 3, 4, 5]);
-                return [4 /*yield*/, service.getAutoSuggest(loginSubstring, limit)];
-            case 2:
-                result = _b.sent();
-                res.json(result);
-                return [3 /*break*/, 5];
-            case 3:
-                e_2 = _b.sent();
-                res.status(500);
-                return [3 /*break*/, 5];
-            case 4:
-                res.end();
-                return [7 /*endfinally*/];
-            case 5: return [2 /*return*/];
+exports.getGroup = getGroup;
+var getGroups = function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
+    return __generator(this, function (_a) {
+        switch (_a.label) {
+            case 0: return [4 /*yield*/, service.getGroups()];
+            case 1: return [2 /*return*/, _a.sent()];
         }
     });
 }); };
-exports.getAutoSuggestUsers = getAutoSuggestUsers;
-var addUser = function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
+exports.getGroups = getGroups;
+var addGroup = function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
     var id, error_1;
     return __generator(this, function (_a) {
         switch (_a.label) {
             case 0:
                 _a.trys.push([0, 2, , 3]);
-                return [4 /*yield*/, service.createUser(req.body)];
+                return [4 /*yield*/, service.createGroup(req.body)];
             case 1:
                 id = _a.sent();
                 res.status(201);
@@ -138,17 +119,17 @@ var addUser = function (req, res) { return __awaiter(void 0, void 0, void 0, fun
         }
     });
 }); };
-exports.addUser = addUser;
-var updateUser = function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
-    var updatedUser, error_2;
+exports.addGroup = addGroup;
+var updateGroup = function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
+    var updatedGroup, error_2;
     return __generator(this, function (_a) {
         switch (_a.label) {
             case 0:
                 _a.trys.push([0, 2, , 3]);
-                return [4 /*yield*/, service.updateUser(__assign(__assign({}, req.body), { id: req.params.id }))];
+                return [4 /*yield*/, service.updateGroup(__assign(__assign({}, req.body), { id: req.params.id }))];
             case 1:
-                updatedUser = _a.sent();
-                res.send(updatedUser);
+                updatedGroup = _a.sent();
+                res.send(updatedGroup);
                 return [3 /*break*/, 3];
             case 2:
                 error_2 = _a.sent();
@@ -166,8 +147,8 @@ var updateUser = function (req, res) { return __awaiter(void 0, void 0, void 0, 
         }
     });
 }); };
-exports.updateUser = updateUser;
-var deleteUser = function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
+exports.updateGroup = updateGroup;
+var deleteGroup = function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
     var id, err_1;
     return __generator(this, function (_a) {
         switch (_a.label) {
@@ -176,7 +157,7 @@ var deleteUser = function (req, res) { return __awaiter(void 0, void 0, void 0, 
                 _a.label = 1;
             case 1:
                 _a.trys.push([1, 3, 4, 5]);
-                return [4 /*yield*/, service.deleteUser(id)];
+                return [4 /*yield*/, service.deleteGroup(id)];
             case 2:
                 _a.sent();
                 res.send(id);
@@ -193,4 +174,32 @@ var deleteUser = function (req, res) { return __awaiter(void 0, void 0, void 0, 
         }
     });
 }); };
-exports.deleteUser = deleteUser;
+exports.deleteGroup = deleteGroup;
+var addUsersToGroup = function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
+    var updatedGroup, error_3;
+    return __generator(this, function (_a) {
+        switch (_a.label) {
+            case 0:
+                _a.trys.push([0, 2, , 3]);
+                return [4 /*yield*/, service.addUsersToGroup(req.params.id, req.body.userIds)];
+            case 1:
+                updatedGroup = _a.sent();
+                res.send(updatedGroup);
+                return [3 /*break*/, 3];
+            case 2:
+                error_3 = _a.sent();
+                if (error_3.isClientDataIncorrect) {
+                    res.status(400);
+                }
+                else {
+                    res.status(500);
+                }
+                res.send(error_3.toString());
+                return [3 /*break*/, 3];
+            case 3:
+                res.end();
+                return [2 /*return*/];
+        }
+    });
+}); };
+exports.addUsersToGroup = addUsersToGroup;
