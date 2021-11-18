@@ -1,7 +1,7 @@
 import {IUserRepository, PublicUser} from "./userRepositoryInterface";
 import {Op, Sequelize} from "sequelize";
 import {User} from "../../models";
-import { UserModel } from "../sequelizeModels";
+import { UserModel } from "../EntityModels";
 
 export const sequelize = new Sequelize(process.env.PSQLConnectionString as string);
 

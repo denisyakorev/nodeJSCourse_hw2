@@ -1,5 +1,5 @@
 import {ViewHandler} from "./types";
-import {GroupPSQLRepository, IGroupRepository} from "../repositories/groupRepository";
+import {GroupPSQLRepository, IGroupRepository} from "../data-access/groupRepository";
 import {groupService, ServiceError} from "../services";
 
 const service = new groupService(GroupPSQLRepository.createRepository() as IGroupRepository);

@@ -1,11 +1,9 @@
 import { IGroupRepository } from ".";
 import {Op, Sequelize} from "sequelize";
 import {Group} from "../../models";
-import {GroupModel, GroupUser} from "../sequelizeModels";
+import {GroupModel, GroupUser} from "../EntityModels";
 
 export const sequelize = new Sequelize(process.env.PSQLConnectionString as string);
-
-
 
 export class GroupPSQLRepository implements IGroupRepository {
     private storage: Sequelize;

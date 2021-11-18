@@ -1,7 +1,7 @@
 import Joi from "joi";
 import passwordComplexity from "joi-password-complexity";
 import {NextFunction, Request, Response} from "express";
-import {genericValidator} from "./utils";
+import {genericValidator} from "./genericValidator";
 
 export const userValidator = async (req: Request, res: Response, next: NextFunction) => {
     genericValidator(req, res, next, userScheme);

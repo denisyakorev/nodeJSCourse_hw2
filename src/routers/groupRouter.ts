@@ -1,7 +1,7 @@
 import express from "express";
 import {addGroup, addUsersToGroup, deleteGroup, getGroup, getGroups, updateGroup} from "../controllers";
-import { groupValidator } from "../data-access";
-import {groupUsersValidator} from "../data-access/groupUsersValidator";
+import { groupValidator } from "../middlewares";
+import {groupUsersValidator} from "../middlewares/groupUsersValidator";
 
 export const groupRouter = express.Router();
 

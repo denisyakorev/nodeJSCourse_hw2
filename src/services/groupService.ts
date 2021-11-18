@@ -1,8 +1,18 @@
 import { ServiceError } from ".";
 import {Group} from "../models";
-import { IGroupRepository } from "../repositories/groupRepository";
+import { IGroupRepository } from "../data-access/groupRepository";
 
-export class groupService {
+export interface IGroupService {
+    getExistingGroup: (groupId: string) => Promise<Group>;
+    getGroup: (groupId: string) => Promise<Group | undefined>;
+    getGroups: () => Promise<Group[]>;
+    createGroup: (group: Omit<Group, 'id'>) => Promise<string>;
+    updateGroup: (group: Group) => Promise<Group>;
+    deleteGroup: (groupId: string) => Promise<boolean>;
+    addUsersToGroup: (groupId: string, userIds: string[]) => Promise<boolean>;
+}
+
+export class groupService implements IGroupService {
     private repository: IGroupRepository;
 
     constructor(repository: IGroupRepository) {

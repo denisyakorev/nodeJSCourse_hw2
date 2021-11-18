@@ -1,5 +1,5 @@
 import {NextFunction, Request, Response} from "express";
-import {genericValidator} from "./utils";
+import {genericValidator} from "./genericValidator";
 import Joi from "joi";
 
 export const groupUsersValidator = async (req: Request, res: Response, next: NextFunction) => {

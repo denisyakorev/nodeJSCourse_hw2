@@ -1,6 +1,6 @@
 import express from 'express';
 import {addUser, deleteUser, getAutoSuggestUsers, getUser, updateUser} from "../controllers";
-import {userValidator} from "../data-access/userValidator";
+import {userValidator} from "../middlewares/userValidator";
 
 export const userRouter = express.Router();
 

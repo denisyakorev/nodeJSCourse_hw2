@@ -1,8 +1,16 @@
 import { ServiceError } from ".";
 import { User } from "../models";
-import {IUserRepository, PublicUser} from "../repositories/userRepository/userRepositoryInterface";
+import {IUserRepository, PublicUser} from "../data-access/userRepository/userRepositoryInterface";
 
-export class userService {
+export interface IUserService {
+    getUser: (userId: string) => Promise<User | undefined>;
+    getAutoSuggest: (loginSubstring: string | undefined, limit: number) => Promise<User[]>;
+    createUser: (user: PublicUser) => Promise<string>;
+    updateUser: (user: Omit<User, "isDeleted">) => Promise<User | Omit<User, "isDeleted">>;
+    deleteUser: (userId: string) => Promise<boolean>;
+}
+
+export class userService implements IUserService {
     private repository: IUserRepository;
 
     constructor(repository: IUserRepository) {

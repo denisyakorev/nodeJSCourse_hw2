@@ -1,6 +1,6 @@
 import {userService, ServiceError} from "../services";
-import {UserRepositoryPSQL} from "../repositories/userRepository/userRepositoryPSQL";
-import {IUserRepository} from "../repositories/userRepository/userRepositoryInterface";
+import {UserRepositoryPSQL} from "../data-access/userRepository/userRepositoryPSQL";
+import {IUserRepository} from "../data-access/userRepository/userRepositoryInterface";
 import { ViewHandler } from "./types";
 
 const service = new userService(UserRepositoryPSQL.createRepository() as IUserRepository);
