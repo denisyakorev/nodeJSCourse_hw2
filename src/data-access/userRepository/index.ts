@@ -1,2 +1,2 @@
-export * from './userRepositoryPSQL';
+export * from './userRepository';
 export * from './userRepositoryInterface';

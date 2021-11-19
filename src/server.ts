@@ -1,22 +1,21 @@
-import {NextFunction, Response, Request} from "express";
-import { userRouter, groupRouter } from "./routers";
+import 'reflect-metadata';
 
-
+import {InversifyExpressServer} from "inversify-express-utils";
 const express = require('express');
-const app = express();
-const port = 3000;
 
-app.use(express.json());
+import './ioc/loader';
+import { Container } from 'inversify';
 
-app.use('/user', userRouter);
-app.use('/group', groupRouter);
+let container = new Container();
+let server = new InversifyExpressServer(container);
 
-app.use(function errorHandler(err: Error, req: Request, res: Response, next: NextFunction) {
-    console.log(err.stack)
-    if (res.headersSent) {
-        return next(err);
-    }
-    res.status(500);
+server.setConfig((theApp) => {
+    theApp.use(express.json());
 });
 
+const app = server.build();
+const port = 3000;
+
 app.listen(port, () => console.log(`Server started on port ${port}`));
+
+exports = module.exports = app;

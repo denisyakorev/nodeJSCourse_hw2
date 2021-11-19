@@ -1,6 +1,9 @@
 import { ServiceError } from ".";
 import {Group} from "../models";
 import { IGroupRepository } from "../data-access/groupRepository";
+import {TYPES} from "../constants/types";
+import {inject, injectable} from "inversify";
+import {provide} from "inversify-binding-decorators";
 
 export interface IGroupService {
     getExistingGroup: (groupId: string) => Promise<Group>;
@@ -12,10 +15,11 @@ export interface IGroupService {
     addUsersToGroup: (groupId: string, userIds: string[]) => Promise<boolean>;
 }
 
+@provide(TYPES.IGroupService)
 export class groupService implements IGroupService {
     private repository: IGroupRepository;
 
-    constructor(repository: IGroupRepository) {
+    constructor(@inject(TYPES.IGroupRepository) repository: IGroupRepository) {
         this.repository = repository;
     }
 

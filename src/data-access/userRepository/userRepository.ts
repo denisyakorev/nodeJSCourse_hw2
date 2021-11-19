@@ -2,18 +2,22 @@ import {IUserRepository, PublicUser} from "./userRepositoryInterface";
 import {Op, Sequelize} from "sequelize";
 import {User} from "../../models";
 import { UserModel } from "../EntityModels";
+import { TYPES } from "../../constants/types";
+import { provide } from "inversify-binding-decorators";
+
 
 export const sequelize = new Sequelize(process.env.PSQLConnectionString as string);
 
-export class UserRepositoryPSQL implements IUserRepository {
+@provide(TYPES.IUserRepository)
+export class userRepository implements IUserRepository {
     private storage: Sequelize;
 
     private static repository?: IUserRepository
     public static createRepository = () => {
-        if (!UserRepositoryPSQL.repository) {
-            UserRepositoryPSQL.repository = new UserRepositoryPSQL();
+        if (!userRepository.repository) {
+            userRepository.repository = new userRepository();
         }
-        return UserRepositoryPSQL.repository as IUserRepository;
+        return userRepository.repository as IUserRepository;
     }
 
     constructor () {

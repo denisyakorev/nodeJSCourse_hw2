@@ -1,6 +1,9 @@
 import { ServiceError } from ".";
 import { User } from "../models";
 import {IUserRepository, PublicUser} from "../data-access/userRepository/userRepositoryInterface";
+import {inject, injectable} from "inversify";
+import {TYPES} from "../constants/types";
+import { provide } from "inversify-binding-decorators";
 
 export interface IUserService {
     getUser: (userId: string) => Promise<User | undefined>;
@@ -10,10 +13,11 @@ export interface IUserService {
     deleteUser: (userId: string) => Promise<boolean>;
 }
 
+@provide(TYPES.IUserService)
 export class userService implements IUserService {
     private repository: IUserRepository;
 
-    constructor(repository: IUserRepository) {
+    constructor(@inject(TYPES.IUserRepository) repository: IUserRepository) {
         this.repository = repository;
     }
 

@@ -1,0 +1,14 @@
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.myContainer = void 0;
+var inversify_1 = require("inversify");
+var types_1 = require("./constants/types");
+var services_1 = require("./services");
+var userRepository_1 = require("./data-access/userRepository");
+var groupRepository_1 = require("./data-access/groupRepository");
+var myContainer = new inversify_1.Container();
+exports.myContainer = myContainer;
+myContainer.bind(types_1.TYPES.IUserService).to(services_1.userService);
+myContainer.bind(types_1.TYPES.IGroupService).to(services_1.groupService);
+myContainer.bind(types_1.TYPES.IUserRepository).to(userRepository_1.userRepository);
+myContainer.bind(types_1.TYPES.IGroupRepository).to(groupRepository_1.groupRepository);

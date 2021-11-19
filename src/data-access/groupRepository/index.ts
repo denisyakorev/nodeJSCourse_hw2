@@ -1,2 +1,2 @@
 export * from './groupRepositoryInterface';
-export * from './groupRepositoryPSQL';
+export * from './groupRepository';

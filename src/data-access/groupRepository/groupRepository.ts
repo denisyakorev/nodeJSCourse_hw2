@@ -2,17 +2,20 @@ import { IGroupRepository } from ".";
 import {Op, Sequelize} from "sequelize";
 import {Group} from "../../models";
 import {GroupModel, GroupUser} from "../EntityModels";
+import {provide} from "inversify-binding-decorators";
+import {TYPES} from "../../constants/types";
 
 export const sequelize = new Sequelize(process.env.PSQLConnectionString as string);
 
-export class GroupPSQLRepository implements IGroupRepository {
+@provide(TYPES.IGroupRepository)
+export class groupRepository implements IGroupRepository {
     private storage: Sequelize;
     private static repository?: IGroupRepository
     public static createRepository = () => {
-        if (!GroupPSQLRepository.repository) {
-            GroupPSQLRepository.repository = new GroupPSQLRepository();
+        if (!groupRepository.repository) {
+            groupRepository.repository = new groupRepository();
         }
-        return GroupPSQLRepository.repository as IGroupRepository;
+        return groupRepository.repository as IGroupRepository;
     }
 
     constructor () {

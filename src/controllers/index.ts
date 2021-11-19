@@ -1,3 +1,3 @@
 export * from './userController';
-export * from './groupControllers';
-export * from './types';
+export * from './groupController';
+export * from './controllerTypes';
