@@ -1,4 +1,3 @@
-import {IGroupController, IUserController} from "../controllers";
 import {IGroupService, IUserService} from "../services";
 import {IGroupRepository} from "../data-access/groupRepository";
 import {IUserRepository} from "../data-access/userRepository";

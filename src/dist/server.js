@@ -5,7 +5,15 @@ var inversify_express_utils_1 = require("inversify-express-utils");
 var express = require('express');
 require("./ioc/loader");
 var inversify_1 = require("inversify");
+var services_1 = require("./services");
+var types_1 = require("./constants/types");
+var groupRepository_1 = require("./data-access/groupRepository");
+var userRepository_1 = require("./data-access/userRepository");
 var container = new inversify_1.Container();
+container.bind(types_1.TYPES.IGroupService).to(services_1.groupService);
+container.bind(types_1.TYPES.IGroupRepository).to(groupRepository_1.groupRepository);
+container.bind(types_1.TYPES.IUserService).to(services_1.userService);
+container.bind(types_1.TYPES.IUserRepository).to(userRepository_1.userRepository);
 var server = new inversify_express_utils_1.InversifyExpressServer(container);
 server.setConfig(function (theApp) {
     theApp.use(express.json());

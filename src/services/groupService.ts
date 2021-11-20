@@ -1,9 +1,9 @@
+import {provide} from "inversify-binding-decorators";
+import {inject} from "inversify";
 import { ServiceError } from ".";
 import {Group} from "../models";
 import { IGroupRepository } from "../data-access/groupRepository";
 import {TYPES} from "../constants/types";
-import {inject, injectable} from "inversify";
-import {provide} from "inversify-binding-decorators";
 
 export interface IGroupService {
     getExistingGroup: (groupId: string) => Promise<Group>;

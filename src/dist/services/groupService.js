@@ -49,10 +49,10 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.groupService = void 0;
+var inversify_binding_decorators_1 = require("inversify-binding-decorators");
+var inversify_1 = require("inversify");
 var _1 = require(".");
 var types_1 = require("../constants/types");
-var inversify_1 = require("inversify");
-var inversify_binding_decorators_1 = require("inversify-binding-decorators");
 var groupService = /** @class */ (function () {
     function groupService(repository) {
         var _this = this;
