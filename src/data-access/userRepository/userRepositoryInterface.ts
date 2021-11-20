@@ -1,6 +1,6 @@
 import { User } from "../../models";
 
-export type IRepository = {
+export type IUserRepository = {
     createUser: (user: PublicUser) => Promise<string>;
     deleteUser: (id: string) => Promise<boolean>;
     getAutoSuggestUsers: (loginSubstring: string, limit: number) => Promise<User[]>;

@@ -10,6 +10,18 @@ var __assign = (this && this.__assign) || function () {
     };
     return __assign.apply(this, arguments);
 };
+var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+var __metadata = (this && this.__metadata) || function (k, v) {
+    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+};
+var __param = (this && this.__param) || function (paramIndex, decorator) {
+    return function (target, key) { decorator(target, key, paramIndex); }
+};
 var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
     function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
     return new (P || (P = Promise))(function (resolve, reject) {
@@ -47,150 +59,203 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
     }
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.deleteUser = exports.updateUser = exports.addUser = exports.getAutoSuggestUsers = exports.getUser = void 0;
-var services_1 = require("../services");
-var userPSQLRepository_1 = require("../repositories/userRepository/userPSQLRepository");
-var service = new services_1.userService(userPSQLRepository_1.UserPSQLRepository.createRepository());
-var getUser = function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
-    var id, user, e_1;
-    return __generator(this, function (_a) {
-        switch (_a.label) {
-            case 0:
-                id = req.params.id;
-                _a.label = 1;
-            case 1:
-                _a.trys.push([1, 3, 4, 5]);
-                return [4 /*yield*/, service.getUser(id)];
-            case 2:
-                user = _a.sent();
-                if (user) {
-                    res.json(user);
+exports.userController = void 0;
+var inversify_1 = require("inversify");
+var inversify_express_utils_1 = require("inversify-express-utils");
+var types_1 = require("../constants/types");
+var middlewares_1 = require("../middlewares");
+var userController = /** @class */ (function () {
+    function userController(service) {
+        this.service = service;
+    }
+    userController.prototype.getAutoSuggestUsers = function (req, res) {
+        var _a;
+        return __awaiter(this, void 0, void 0, function () {
+            var loginSubstring, limit, result, e_1;
+            return __generator(this, function (_b) {
+                switch (_b.label) {
+                    case 0:
+                        loginSubstring = (_a = req.query.loginSubstring) === null || _a === void 0 ? void 0 : _a.toString();
+                        limit = req.query.limit ? parseInt(req.query.limit.toString()) : 0;
+                        _b.label = 1;
+                    case 1:
+                        _b.trys.push([1, 3, 4, 5]);
+                        return [4 /*yield*/, this.service.getAutoSuggest(loginSubstring, limit)];
+                    case 2:
+                        result = _b.sent();
+                        res.json(result);
+                        return [3 /*break*/, 5];
+                    case 3:
+                        e_1 = _b.sent();
+                        res.status(500);
+                        return [3 /*break*/, 5];
+                    case 4:
+                        res.end();
+                        return [7 /*endfinally*/];
+                    case 5: return [2 /*return*/];
                 }
-                else {
-                    res.status(404);
+            });
+        });
+    };
+    ;
+    userController.prototype.getUser = function (req, res) {
+        return __awaiter(this, void 0, void 0, function () {
+            var id, user, e_2;
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0:
+                        id = req.params.id;
+                        _a.label = 1;
+                    case 1:
+                        _a.trys.push([1, 3, 4, 5]);
+                        return [4 /*yield*/, this.service.getUser(id)];
+                    case 2:
+                        user = _a.sent();
+                        if (user) {
+                            res.json(user);
+                        }
+                        else {
+                            res.status(404);
+                        }
+                        return [3 /*break*/, 5];
+                    case 3:
+                        e_2 = _a.sent();
+                        res.status(500);
+                        return [3 /*break*/, 5];
+                    case 4:
+                        res.end();
+                        return [7 /*endfinally*/];
+                    case 5: return [2 /*return*/];
                 }
-                return [3 /*break*/, 5];
-            case 3:
-                e_1 = _a.sent();
-                res.status(500);
-                return [3 /*break*/, 5];
-            case 4:
-                res.end();
-                return [7 /*endfinally*/];
-            case 5: return [2 /*return*/];
-        }
-    });
-}); };
-exports.getUser = getUser;
-var getAutoSuggestUsers = function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
-    var loginSubstring, limit, result, e_2;
-    var _a;
-    return __generator(this, function (_b) {
-        switch (_b.label) {
-            case 0:
-                loginSubstring = (_a = req.query.loginSubstring) === null || _a === void 0 ? void 0 : _a.toString();
-                limit = req.query.limit ? parseInt(req.query.limit.toString()) : 0;
-                _b.label = 1;
-            case 1:
-                _b.trys.push([1, 3, 4, 5]);
-                return [4 /*yield*/, service.getAutoSuggest(loginSubstring, limit)];
-            case 2:
-                result = _b.sent();
-                res.json(result);
-                return [3 /*break*/, 5];
-            case 3:
-                e_2 = _b.sent();
-                res.status(500);
-                return [3 /*break*/, 5];
-            case 4:
-                res.end();
-                return [7 /*endfinally*/];
-            case 5: return [2 /*return*/];
-        }
-    });
-}); };
-exports.getAutoSuggestUsers = getAutoSuggestUsers;
-var addUser = function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
-    var id, error_1;
-    return __generator(this, function (_a) {
-        switch (_a.label) {
-            case 0:
-                _a.trys.push([0, 2, , 3]);
-                return [4 /*yield*/, service.createUser(req.body)];
-            case 1:
-                id = _a.sent();
-                res.status(201);
-                res.send(id);
-                return [3 /*break*/, 3];
-            case 2:
-                error_1 = _a.sent();
-                if (error_1.isClientDataIncorrect) {
-                    res.status(400);
+            });
+        });
+    };
+    ;
+    userController.prototype.updateUser = function (req, res) {
+        return __awaiter(this, void 0, void 0, function () {
+            var updatedUser, error_1;
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0:
+                        _a.trys.push([0, 2, , 3]);
+                        return [4 /*yield*/, this.service.updateUser(__assign(__assign({}, req.body), { id: req.params.id }))];
+                    case 1:
+                        updatedUser = _a.sent();
+                        res.send(updatedUser);
+                        return [3 /*break*/, 3];
+                    case 2:
+                        error_1 = _a.sent();
+                        if (error_1.isClientDataIncorrect) {
+                            res.status(400);
+                        }
+                        else {
+                            res.status(500);
+                        }
+                        res.send(error_1.toString());
+                        return [3 /*break*/, 3];
+                    case 3:
+                        res.end();
+                        return [2 /*return*/];
                 }
-                else {
-                    res.status(500);
+            });
+        });
+    };
+    ;
+    userController.prototype.deleteUser = function (req, res) {
+        return __awaiter(this, void 0, void 0, function () {
+            var id, err_1;
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0:
+                        id = req.params.id;
+                        _a.label = 1;
+                    case 1:
+                        _a.trys.push([1, 3, 4, 5]);
+                        return [4 /*yield*/, this.service.deleteUser(id)];
+                    case 2:
+                        _a.sent();
+                        res.send(id);
+                        return [3 /*break*/, 5];
+                    case 3:
+                        err_1 = _a.sent();
+                        console.log(err_1);
+                        res.status(500);
+                        return [3 /*break*/, 5];
+                    case 4:
+                        res.end();
+                        return [7 /*endfinally*/];
+                    case 5: return [2 /*return*/];
                 }
-                res.send(error_1.toString());
-                return [3 /*break*/, 3];
-            case 3:
-                res.end();
-                return [2 /*return*/];
-        }
-    });
-}); };
-exports.addUser = addUser;
-var updateUser = function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
-    var updatedUser, error_2;
-    return __generator(this, function (_a) {
-        switch (_a.label) {
-            case 0:
-                _a.trys.push([0, 2, , 3]);
-                return [4 /*yield*/, service.updateUser(__assign(__assign({}, req.body), { id: req.params.id }))];
-            case 1:
-                updatedUser = _a.sent();
-                res.send(updatedUser);
-                return [3 /*break*/, 3];
-            case 2:
-                error_2 = _a.sent();
-                if (error_2.isClientDataIncorrect) {
-                    res.status(400);
+            });
+        });
+    };
+    ;
+    userController.prototype.addUser = function (req, res) {
+        return __awaiter(this, void 0, void 0, function () {
+            var id, error_2;
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0:
+                        _a.trys.push([0, 2, , 3]);
+                        return [4 /*yield*/, this.service.createUser(req.body)];
+                    case 1:
+                        id = _a.sent();
+                        res.status(201);
+                        res.send(id);
+                        return [3 /*break*/, 3];
+                    case 2:
+                        error_2 = _a.sent();
+                        if (error_2.isClientDataIncorrect) {
+                            res.status(400);
+                        }
+                        else {
+                            res.status(500);
+                        }
+                        res.send(error_2.toString());
+                        return [3 /*break*/, 3];
+                    case 3:
+                        res.end();
+                        return [2 /*return*/];
                 }
-                else {
-                    res.status(500);
-                }
-                res.send(error_2.toString());
-                return [3 /*break*/, 3];
-            case 3:
-                res.end();
-                return [2 /*return*/];
-        }
-    });
-}); };
-exports.updateUser = updateUser;
-var deleteUser = function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
-    var id, err_1;
-    return __generator(this, function (_a) {
-        switch (_a.label) {
-            case 0:
-                id = req.params.id;
-                _a.label = 1;
-            case 1:
-                _a.trys.push([1, 3, 4, 5]);
-                return [4 /*yield*/, service.deleteUser(id)];
-            case 2:
-                _a.sent();
-                res.send(id);
-                return [3 /*break*/, 5];
-            case 3:
-                err_1 = _a.sent();
-                console.log(err_1);
-                res.status(500);
-                return [3 /*break*/, 5];
-            case 4:
-                res.end();
-                return [7 /*endfinally*/];
-            case 5: return [2 /*return*/];
-        }
-    });
-}); };
-exports.deleteUser = deleteUser;
+            });
+        });
+    };
+    ;
+    __decorate([
+        (0, inversify_express_utils_1.httpGet)('/autosuggest'),
+        __metadata("design:type", Function),
+        __metadata("design:paramtypes", [Object, Object]),
+        __metadata("design:returntype", Promise)
+    ], userController.prototype, "getAutoSuggestUsers", null);
+    __decorate([
+        (0, inversify_express_utils_1.httpGet)('/:id'),
+        __metadata("design:type", Function),
+        __metadata("design:paramtypes", [Object, Object]),
+        __metadata("design:returntype", Promise)
+    ], userController.prototype, "getUser", null);
+    __decorate([
+        (0, inversify_express_utils_1.httpPut)('/:id', middlewares_1.userValidator),
+        __metadata("design:type", Function),
+        __metadata("design:paramtypes", [Object, Object]),
+        __metadata("design:returntype", Promise)
+    ], userController.prototype, "updateUser", null);
+    __decorate([
+        (0, inversify_express_utils_1.httpDelete)('/:id'),
+        __metadata("design:type", Function),
+        __metadata("design:paramtypes", [Object, Object]),
+        __metadata("design:returntype", Promise)
+    ], userController.prototype, "deleteUser", null);
+    __decorate([
+        (0, inversify_express_utils_1.httpPost)('/', middlewares_1.userValidator),
+        __metadata("design:type", Function),
+        __metadata("design:paramtypes", [Object, Object]),
+        __metadata("design:returntype", Promise)
+    ], userController.prototype, "addUser", null);
+    userController = __decorate([
+        (0, inversify_express_utils_1.controller)('/user'),
+        __param(0, (0, inversify_1.inject)(types_1.TYPES.IUserService)),
+        __metadata("design:paramtypes", [Object])
+    ], userController);
+    return userController;
+}());
+exports.userController = userController;

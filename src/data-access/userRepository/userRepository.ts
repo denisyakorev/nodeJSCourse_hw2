@@ -1,19 +1,23 @@
-import {IRepository, PublicUser} from "./userRepositoryInterface";
+import {IUserRepository, PublicUser} from "./userRepositoryInterface";
 import {Op, Sequelize} from "sequelize";
-import {User, UserModel } from "../../models";
+import {User} from "../../models";
+import { UserModel } from "../EntityModels";
+import { TYPES } from "../../constants/types";
+import { provide } from "inversify-binding-decorators";
 
 
 export const sequelize = new Sequelize(process.env.PSQLConnectionString as string);
 
-export class UserPSQLRepository implements IRepository {
+@provide(TYPES.IUserRepository)
+export class userRepository implements IUserRepository {
     private storage: Sequelize;
 
-    private static repository?: IRepository
+    private static repository?: IUserRepository
     public static createRepository = () => {
-        if (!UserPSQLRepository.repository) {
-            UserPSQLRepository.repository = new UserPSQLRepository();
+        if (!userRepository.repository) {
+            userRepository.repository = new userRepository();
         }
-        return UserPSQLRepository.repository as IRepository;
+        return userRepository.repository as IUserRepository;
     }
 
     constructor () {
@@ -71,7 +75,7 @@ export class UserPSQLRepository implements IRepository {
     }
 
     updateUser = async (user: Omit<User, "isDeleted">): Promise<User | Omit<User, "isDeleted">> => {
-        const updatedUsers = await UserModel.update({
+        await UserModel.update({
             login: user.login,
             password: user.password,
             age: user.age

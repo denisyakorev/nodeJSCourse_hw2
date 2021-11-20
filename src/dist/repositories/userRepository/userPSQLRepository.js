@@ -36,10 +36,39 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
     }
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.UserPSQLRepository = exports.sequelize = void 0;
+exports.UserPSQLRepository = exports.UserModel = exports.sequelize = void 0;
 var sequelize_1 = require("sequelize");
-var UserSequelizeModel_1 = require("../../models/UserSequelizeModel");
 exports.sequelize = new sequelize_1.Sequelize(process.env.PSQLConnectionString);
+;
+exports.UserModel = exports.sequelize.define('User', {
+    id: {
+        type: sequelize_1.DataTypes.UUIDV4,
+        defaultValue: sequelize_1.DataTypes.UUIDV4,
+        primaryKey: true,
+    },
+    login: {
+        type: sequelize_1.DataTypes.STRING,
+        allowNull: false,
+        unique: true,
+    },
+    password: {
+        type: sequelize_1.DataTypes.STRING,
+        allowNull: false,
+    },
+    age: {
+        type: sequelize_1.DataTypes.INTEGER,
+        allowNull: false
+    },
+    isDeleted: {
+        type: sequelize_1.DataTypes.BOOLEAN,
+        allowNull: false,
+        defaultValue: false,
+    },
+}, {
+    tableName: 'Users',
+    indexes: [{ fields: ['id', 'login'] }],
+    timestamps: false,
+});
 var UserPSQLRepository = /** @class */ (function () {
     function UserPSQLRepository() {
         var _this = this;
@@ -47,7 +76,7 @@ var UserPSQLRepository = /** @class */ (function () {
             var createdUser;
             return __generator(this, function (_a) {
                 switch (_a.label) {
-                    case 0: return [4 /*yield*/, UserSequelizeModel_1.UserModel.create(user)];
+                    case 0: return [4 /*yield*/, exports.UserModel.create(user)];
                     case 1:
                         createdUser = _a.sent();
                         return [2 /*return*/, createdUser.id];
@@ -57,7 +86,7 @@ var UserPSQLRepository = /** @class */ (function () {
         this.deleteUser = function (userId) { return __awaiter(_this, void 0, void 0, function () {
             return __generator(this, function (_a) {
                 switch (_a.label) {
-                    case 0: return [4 /*yield*/, UserSequelizeModel_1.UserModel.update({ isDeleted: true }, {
+                    case 0: return [4 /*yield*/, exports.UserModel.update({ isDeleted: true }, {
                             where: {
                                 id: userId,
                             },
@@ -72,7 +101,7 @@ var UserPSQLRepository = /** @class */ (function () {
             var _a, _b;
             return __generator(this, function (_c) {
                 switch (_c.label) {
-                    case 0: return [4 /*yield*/, UserSequelizeModel_1.UserModel.findAll({
+                    case 0: return [4 /*yield*/, exports.UserModel.findAll({
                             where: {
                                 login: (_a = {},
                                     _a[sequelize_1.Op.substring] = loginSubstring,
@@ -94,7 +123,7 @@ var UserPSQLRepository = /** @class */ (function () {
             var user;
             return __generator(this, function (_a) {
                 switch (_a.label) {
-                    case 0: return [4 /*yield*/, UserSequelizeModel_1.UserModel.findByPk(id)];
+                    case 0: return [4 /*yield*/, exports.UserModel.findByPk(id)];
                     case 1:
                         user = _a.sent();
                         return [2 /*return*/, user ? user : undefined];
@@ -106,7 +135,7 @@ var UserPSQLRepository = /** @class */ (function () {
             var _a;
             return __generator(this, function (_b) {
                 switch (_b.label) {
-                    case 0: return [4 /*yield*/, UserSequelizeModel_1.UserModel.findOne({
+                    case 0: return [4 /*yield*/, exports.UserModel.findOne({
                             where: {
                                 login: (_a = {},
                                     _a[sequelize_1.Op.in] = [login],
@@ -120,11 +149,11 @@ var UserPSQLRepository = /** @class */ (function () {
             });
         }); };
         this.updateUser = function (user) { return __awaiter(_this, void 0, void 0, function () {
-            var updatedUsers, updatedUser;
+            var updatedUser;
             var _a;
             return __generator(this, function (_b) {
                 switch (_b.label) {
-                    case 0: return [4 /*yield*/, UserSequelizeModel_1.UserModel.update({
+                    case 0: return [4 /*yield*/, exports.UserModel.update({
                             login: user.login,
                             password: user.password,
                             age: user.age
@@ -136,7 +165,7 @@ var UserPSQLRepository = /** @class */ (function () {
                             },
                         })];
                     case 1:
-                        updatedUsers = _b.sent();
+                        _b.sent();
                         return [4 /*yield*/, this.getUser(user.id)];
                     case 2:
                         updatedUser = _b.sent();

@@ -1,81 +1,106 @@
+import {inject} from "inversify";
+import {
+    controller, httpGet, httpPost, httpPut, httpDelete
+} from 'inversify-express-utils';
+import {ServiceError, IUserService} from "../services";
+import { ViewHandler } from "./controllerTypes";
+import {TYPES} from "../constants/types";
 import {Request, Response} from "express";
-import {userService, UserServiceError} from "../services";
-import {UserPSQLRepository} from "../repositories/userRepository/userPSQLRepository";
-import {IRepository} from "../repositories/userRepository/userRepositoryInterface";
+import {userValidator} from "../middlewares";
 
-const service = new userService(UserPSQLRepository.createRepository() as IRepository);
+export interface IUserController {
+    getUser: ViewHandler;
+    getAutoSuggestUsers: ViewHandler;
+    addUser: ViewHandler;
+    updateUser: ViewHandler;
+    deleteUser: ViewHandler;
+}
 
-export type ViewHandler = (req: Request, res: Response) => void;
+@controller('/user')
+export class userController implements IUserController {
 
-export const getUser: ViewHandler = async (req, res) => {
-  const id = req.params.id;
-  try {
-      const user = await service.getUser(id);
-      if (user) {
-          res.json(user);
-      } else {
-          res.status(404);
-      }
-  } catch (e) {
-      res.status(500);
-  } finally {
-      res.end();
-  }
-};
+    private service: IUserService;
 
-export const getAutoSuggestUsers: ViewHandler = async (req, res) => {
-    const loginSubstring = req.query.loginSubstring?.toString();
-    const limit = req.query.limit ? parseInt(req.query.limit.toString()) : 0;
-    try {
-        const result = await service.getAutoSuggest(loginSubstring, limit);
-        res.json(result);
-    } catch (e) {
-        res.status(500);
-    } finally {
-        res.end();
+    constructor(@inject(TYPES.IUserService) service: IUserService) {
+        this.service = service;
     }
-};
 
-export const addUser: ViewHandler = async (req, res) => {
-    try {
-        const id = await service.createUser(req.body)
-        res.status(201);
-        res.send(id);
-    }catch(error) {
-        if ((error as UserServiceError).isClientDataIncorrect) {
-            res.status(400);
-        } else {
+    @httpGet('/autosuggest')
+    async getAutoSuggestUsers(req: Request, res: Response) {
+        const loginSubstring = req.query.loginSubstring?.toString();
+        const limit = req.query.limit ? parseInt(req.query.limit.toString()) : 0;
+        try {
+            const result = await this.service.getAutoSuggest(loginSubstring, limit);
+            res.json(result);
+        } catch (e) {
             res.status(500);
+        } finally {
+            res.end();
         }
-        res.send((error as Error).toString());
-    }
-    res.end();
-};
+    };
 
-export const updateUser: ViewHandler = async (req, res) => {
-    try {
-        const updatedUser = await service.updateUser({...req.body, id: req.params.id});
-        res.send(updatedUser);
-    } catch(error) {
-        if ((error as UserServiceError).isClientDataIncorrect) {
-            res.status(400);
-        } else {
+    @httpGet('/:id')
+    async getUser(req: Request, res: Response) {
+        const id = req.params.id;
+        try {
+            const user = await this.service.getUser(id);
+            if (user) {
+                res.json(user);
+            } else {
+                res.status(404);
+            }
+        } catch (e) {
             res.status(500);
+        } finally {
+            res.end();
         }
-        res.send((error as Error).toString());
-    }
-    res.end();
-};
+    };
 
-export const deleteUser: ViewHandler = async (req, res) => {
-    const id = req.params.id;
-    try {
-        await service.deleteUser(id);
-        res.send(id);
-    } catch(err) {
-        console.log(err);
-        res.status(500);
-    } finally {
+    @httpPut('/:id', userValidator)
+    async updateUser(req: Request, res: Response) {
+        try {
+            const updatedUser = await this.service.updateUser({...req.body, id: req.params.id});
+            res.send(updatedUser);
+        } catch(error) {
+            if ((error as ServiceError).isClientDataIncorrect) {
+                res.status(400);
+            } else {
+                res.status(500);
+            }
+            res.send((error as Error).toString());
+        }
         res.end();
-    }
-};
+    };
+
+    @httpDelete('/:id')
+    async deleteUser(req: Request, res: Response) {
+        const id = req.params.id;
+        try {
+            await this.service.deleteUser(id);
+            res.send(id);
+        } catch(err) {
+            console.log(err);
+            res.status(500);
+        } finally {
+            res.end();
+        }
+    };
+
+    @httpPost('/', userValidator)
+    async addUser(req: Request, res: Response) {
+        try {
+            const id = await this.service.createUser(req.body)
+            res.status(201);
+            res.send(id);
+        }catch(error) {
+            if ((error as ServiceError).isClientDataIncorrect) {
+                res.status(400);
+            } else {
+                res.status(500);
+            }
+            res.send((error as Error).toString());
+        }
+        res.end();
+    };
+}
+

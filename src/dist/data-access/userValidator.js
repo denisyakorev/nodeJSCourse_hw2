@@ -42,30 +42,11 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.userValidator = void 0;
 var joi_1 = __importDefault(require("joi"));
 var joi_password_complexity_1 = __importDefault(require("joi-password-complexity"));
+var utils_1 = require("./utils");
 var userValidator = function (req, res, next) { return __awaiter(void 0, void 0, void 0, function () {
-    var user, error_1;
     return __generator(this, function (_a) {
-        switch (_a.label) {
-            case 0:
-                _a.trys.push([0, 2, , 3]);
-                if (!req.body)
-                    throw new Error('Empty body');
-                return [4 /*yield*/, userScheme.validateAsync(req.body)];
-            case 1:
-                user = _a.sent();
-                if (user.errors)
-                    throw new Error(JSON.stringify(user.errors));
-                req.body = user;
-                next();
-                return [3 /*break*/, 3];
-            case 2:
-                error_1 = _a.sent();
-                res.status(400);
-                res.send(error_1.message);
-                res.end();
-                return [3 /*break*/, 3];
-            case 3: return [2 /*return*/];
-        }
+        (0, utils_1.genericValidator)(req, res, next, userScheme);
+        return [2 /*return*/];
     });
 }); };
 exports.userValidator = userValidator;

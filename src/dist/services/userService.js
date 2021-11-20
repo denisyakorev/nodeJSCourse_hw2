@@ -1,19 +1,16 @@
 "use strict";
-var __extends = (this && this.__extends) || (function () {
-    var extendStatics = function (d, b) {
-        extendStatics = Object.setPrototypeOf ||
-            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-            function (d, b) { for (var p in b) if (Object.prototype.hasOwnProperty.call(b, p)) d[p] = b[p]; };
-        return extendStatics(d, b);
-    };
-    return function (d, b) {
-        if (typeof b !== "function" && b !== null)
-            throw new TypeError("Class extends value " + String(b) + " is not a constructor or null");
-        extendStatics(d, b);
-        function __() { this.constructor = d; }
-        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-    };
-})();
+var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+var __metadata = (this && this.__metadata) || function (k, v) {
+    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+};
+var __param = (this && this.__param) || function (paramIndex, decorator) {
+    return function (target, key) { decorator(target, key, paramIndex); }
+};
 var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
     function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
     return new (P || (P = Promise))(function (resolve, reject) {
@@ -51,18 +48,11 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
     }
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.userService = exports.UserServiceError = void 0;
-var UserServiceError = /** @class */ (function (_super) {
-    __extends(UserServiceError, _super);
-    function UserServiceError(message, isClientDataIncorrect) {
-        var _this = _super.call(this, message) || this;
-        _this.message = message;
-        _this.isClientDataIncorrect = isClientDataIncorrect;
-        return _this;
-    }
-    return UserServiceError;
-}(Error));
-exports.UserServiceError = UserServiceError;
+exports.userService = void 0;
+var _1 = require(".");
+var inversify_1 = require("inversify");
+var types_1 = require("../constants/types");
+var inversify_binding_decorators_1 = require("inversify-binding-decorators");
 var userService = /** @class */ (function () {
     function userService(repository) {
         var _this = this;
@@ -82,7 +72,7 @@ var userService = /** @class */ (function () {
                     case 1:
                         existingUser = _a.sent();
                         if (!existingUser) {
-                            throw new UserServiceError('There is no user with such id', true);
+                            throw new _1.ServiceError('There is no user with such id', true);
                         }
                         return [2 /*return*/, existingUser];
                 }
@@ -113,7 +103,7 @@ var userService = /** @class */ (function () {
                     case 0: return [4 /*yield*/, this.isLoginExists(user.login)];
                     case 1:
                         if (_a.sent()) {
-                            throw new UserServiceError('Login already exists', true);
+                            throw new _1.ServiceError('Login already exists', true);
                         }
                         return [2 /*return*/, this.repository.createUser(user)];
                 }
@@ -134,7 +124,7 @@ var userService = /** @class */ (function () {
                         _b.label = 3;
                     case 3:
                         if (_a) {
-                            throw new UserServiceError('Login already exists', true);
+                            throw new _1.ServiceError('Login already exists', true);
                         }
                         return [4 /*yield*/, this.repository.updateUser(user)];
                     case 4: return [2 /*return*/, _b.sent()];
@@ -155,6 +145,11 @@ var userService = /** @class */ (function () {
         }); };
         this.repository = repository;
     }
+    userService = __decorate([
+        (0, inversify_binding_decorators_1.provide)(types_1.TYPES.IUserService),
+        __param(0, (0, inversify_1.inject)(types_1.TYPES.IUserRepository)),
+        __metadata("design:paramtypes", [Object])
+    ], userService);
     return userService;
 }());
 exports.userService = userService;
