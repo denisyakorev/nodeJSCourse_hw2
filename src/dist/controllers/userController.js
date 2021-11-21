@@ -64,6 +64,8 @@ var inversify_1 = require("inversify");
 var inversify_express_utils_1 = require("inversify-express-utils");
 var types_1 = require("../constants/types");
 var middlewares_1 = require("../middlewares");
+var errorHandlers_1 = require("../middlewares/errorHandlers");
+var logTimeDecorator_1 = require("../utils/logTimeDecorator");
 var userController = /** @class */ (function () {
     function userController(service) {
         this.service = service;
@@ -71,7 +73,7 @@ var userController = /** @class */ (function () {
     userController.prototype.getAutoSuggestUsers = function (req, res) {
         var _a;
         return __awaiter(this, void 0, void 0, function () {
-            var loginSubstring, limit, result, e_1;
+            var loginSubstring, limit, result, error_1;
             return __generator(this, function (_b) {
                 switch (_b.label) {
                     case 0:
@@ -86,7 +88,8 @@ var userController = /** @class */ (function () {
                         res.json(result);
                         return [3 /*break*/, 5];
                     case 3:
-                        e_1 = _b.sent();
+                        error_1 = _b.sent();
+                        (0, errorHandlers_1.methodErrorHandler)(req, res, error_1);
                         res.status(500);
                         return [3 /*break*/, 5];
                     case 4:
@@ -100,7 +103,7 @@ var userController = /** @class */ (function () {
     ;
     userController.prototype.getUser = function (req, res) {
         return __awaiter(this, void 0, void 0, function () {
-            var id, user, e_2;
+            var id, user, error_2;
             return __generator(this, function (_a) {
                 switch (_a.label) {
                     case 0:
@@ -119,7 +122,8 @@ var userController = /** @class */ (function () {
                         }
                         return [3 /*break*/, 5];
                     case 3:
-                        e_2 = _a.sent();
+                        error_2 = _a.sent();
+                        (0, errorHandlers_1.methodErrorHandler)(req, res, error_2);
                         res.status(500);
                         return [3 /*break*/, 5];
                     case 4:
@@ -133,7 +137,7 @@ var userController = /** @class */ (function () {
     ;
     userController.prototype.updateUser = function (req, res) {
         return __awaiter(this, void 0, void 0, function () {
-            var updatedUser, error_1;
+            var updatedUser, error_3;
             return __generator(this, function (_a) {
                 switch (_a.label) {
                     case 0:
@@ -144,14 +148,15 @@ var userController = /** @class */ (function () {
                         res.send(updatedUser);
                         return [3 /*break*/, 3];
                     case 2:
-                        error_1 = _a.sent();
-                        if (error_1.isClientDataIncorrect) {
+                        error_3 = _a.sent();
+                        (0, errorHandlers_1.methodErrorHandler)(req, res, error_3);
+                        if (error_3.isClientDataIncorrect) {
                             res.status(400);
                         }
                         else {
                             res.status(500);
                         }
-                        res.send(error_1.toString());
+                        res.send(error_3.toString());
                         return [3 /*break*/, 3];
                     case 3:
                         res.end();
@@ -163,7 +168,7 @@ var userController = /** @class */ (function () {
     ;
     userController.prototype.deleteUser = function (req, res) {
         return __awaiter(this, void 0, void 0, function () {
-            var id, err_1;
+            var id, error_4;
             return __generator(this, function (_a) {
                 switch (_a.label) {
                     case 0:
@@ -177,8 +182,8 @@ var userController = /** @class */ (function () {
                         res.send(id);
                         return [3 /*break*/, 5];
                     case 3:
-                        err_1 = _a.sent();
-                        console.log(err_1);
+                        error_4 = _a.sent();
+                        (0, errorHandlers_1.methodErrorHandler)(req, res, error_4);
                         res.status(500);
                         return [3 /*break*/, 5];
                     case 4:
@@ -192,7 +197,7 @@ var userController = /** @class */ (function () {
     ;
     userController.prototype.addUser = function (req, res) {
         return __awaiter(this, void 0, void 0, function () {
-            var id, error_2;
+            var id, error_5;
             return __generator(this, function (_a) {
                 switch (_a.label) {
                     case 0:
@@ -204,14 +209,15 @@ var userController = /** @class */ (function () {
                         res.send(id);
                         return [3 /*break*/, 3];
                     case 2:
-                        error_2 = _a.sent();
-                        if (error_2.isClientDataIncorrect) {
+                        error_5 = _a.sent();
+                        (0, errorHandlers_1.methodErrorHandler)(req, res, error_5);
+                        if (error_5.isClientDataIncorrect) {
                             res.status(400);
                         }
                         else {
                             res.status(500);
                         }
-                        res.send(error_2.toString());
+                        res.send(error_5.toString());
                         return [3 /*break*/, 3];
                     case 3:
                         res.end();
@@ -223,30 +229,35 @@ var userController = /** @class */ (function () {
     ;
     __decorate([
         (0, inversify_express_utils_1.httpGet)('/autosuggest'),
+        logTimeDecorator_1.logTime,
         __metadata("design:type", Function),
         __metadata("design:paramtypes", [Object, Object]),
         __metadata("design:returntype", Promise)
     ], userController.prototype, "getAutoSuggestUsers", null);
     __decorate([
         (0, inversify_express_utils_1.httpGet)('/:id'),
+        logTimeDecorator_1.logTime,
         __metadata("design:type", Function),
         __metadata("design:paramtypes", [Object, Object]),
         __metadata("design:returntype", Promise)
     ], userController.prototype, "getUser", null);
     __decorate([
         (0, inversify_express_utils_1.httpPut)('/:id', middlewares_1.userValidator),
+        logTimeDecorator_1.logTime,
         __metadata("design:type", Function),
         __metadata("design:paramtypes", [Object, Object]),
         __metadata("design:returntype", Promise)
     ], userController.prototype, "updateUser", null);
     __decorate([
         (0, inversify_express_utils_1.httpDelete)('/:id'),
+        logTimeDecorator_1.logTime,
         __metadata("design:type", Function),
         __metadata("design:paramtypes", [Object, Object]),
         __metadata("design:returntype", Promise)
     ], userController.prototype, "deleteUser", null);
     __decorate([
         (0, inversify_express_utils_1.httpPost)('/', middlewares_1.userValidator),
+        logTimeDecorator_1.logTime,
         __metadata("design:type", Function),
         __metadata("design:paramtypes", [Object, Object]),
         __metadata("design:returntype", Promise)

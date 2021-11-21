@@ -7,6 +7,8 @@ import { ViewHandler } from "./controllerTypes";
 import {TYPES} from "../constants/types";
 import {Request, Response} from "express";
 import {userValidator} from "../middlewares";
+import {logger, methodErrorHandler} from "../middlewares/errorHandlers";
+import { logTime } from "../utils/logTimeDecorator";
 
 export interface IUserController {
     getUser: ViewHandler;
@@ -26,13 +28,15 @@ export class userController implements IUserController {
     }
 
     @httpGet('/autosuggest')
+    @logTime
     async getAutoSuggestUsers(req: Request, res: Response) {
         const loginSubstring = req.query.loginSubstring?.toString();
         const limit = req.query.limit ? parseInt(req.query.limit.toString()) : 0;
         try {
             const result = await this.service.getAutoSuggest(loginSubstring, limit);
             res.json(result);
-        } catch (e) {
+        } catch (error) {
+            methodErrorHandler(req, res, error as Error);
             res.status(500);
         } finally {
             res.end();
@@ -40,6 +44,7 @@ export class userController implements IUserController {
     };
 
     @httpGet('/:id')
+    @logTime
     async getUser(req: Request, res: Response) {
         const id = req.params.id;
         try {
@@ -49,7 +54,8 @@ export class userController implements IUserController {
             } else {
                 res.status(404);
             }
-        } catch (e) {
+        } catch (error) {
+            methodErrorHandler(req, res, error as Error);
             res.status(500);
         } finally {
             res.end();
@@ -57,11 +63,13 @@ export class userController implements IUserController {
     };
 
     @httpPut('/:id', userValidator)
+    @logTime
     async updateUser(req: Request, res: Response) {
         try {
             const updatedUser = await this.service.updateUser({...req.body, id: req.params.id});
             res.send(updatedUser);
         } catch(error) {
+            methodErrorHandler(req, res, error as Error);
             if ((error as ServiceError).isClientDataIncorrect) {
                 res.status(400);
             } else {
@@ -73,13 +81,14 @@ export class userController implements IUserController {
     };
 
     @httpDelete('/:id')
+    @logTime
     async deleteUser(req: Request, res: Response) {
         const id = req.params.id;
         try {
             await this.service.deleteUser(id);
             res.send(id);
-        } catch(err) {
-            console.log(err);
+        } catch(error) {
+            methodErrorHandler(req, res, error as Error);
             res.status(500);
         } finally {
             res.end();
@@ -87,12 +96,14 @@ export class userController implements IUserController {
     };
 
     @httpPost('/', userValidator)
+    @logTime
     async addUser(req: Request, res: Response) {
         try {
             const id = await this.service.createUser(req.body)
             res.status(201);
             res.send(id);
         }catch(error) {
+            methodErrorHandler(req, res, error as Error);
             if ((error as ServiceError).isClientDataIncorrect) {
                 res.status(400);
             } else {
