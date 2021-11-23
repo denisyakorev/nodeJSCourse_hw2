@@ -93,7 +93,7 @@ var groupController = /** @class */ (function () {
                         return [3 /*break*/, 5];
                     case 3:
                         error_1 = _a.sent();
-                        errorHandlers_1.logger.error("getGroup: req - " + JSON.stringify(req) + "\n            Error: " + error_1);
+                        (0, errorHandlers_1.methodErrorHandler)(req, res, error_1);
                         res.status(500);
                         return [3 /*break*/, 5];
                     case 4:
@@ -119,7 +119,7 @@ var groupController = /** @class */ (function () {
                         return [3 /*break*/, 3];
                     case 2:
                         error_2 = _a.sent();
-                        errorHandlers_1.logger.error("updateGroup: req - " + JSON.stringify(req) + "\n            Error: " + error_2);
+                        (0, errorHandlers_1.methodErrorHandler)(req, res, error_2);
                         if (error_2.isClientDataIncorrect) {
                             res.status(400);
                         }
@@ -153,7 +153,7 @@ var groupController = /** @class */ (function () {
                         return [3 /*break*/, 5];
                     case 3:
                         error_3 = _a.sent();
-                        errorHandlers_1.logger.error("deleteGroup: req - " + JSON.stringify(req) + "\n            Error: " + error_3);
+                        (0, errorHandlers_1.methodErrorHandler)(req, res, error_3);
                         res.status(500);
                         return [3 /*break*/, 5];
                     case 4:
@@ -179,7 +179,7 @@ var groupController = /** @class */ (function () {
                         return [3 /*break*/, 3];
                     case 2:
                         error_4 = _a.sent();
-                        errorHandlers_1.logger.error("addUsersToGroup: req - " + JSON.stringify(req) + "\n            Error: " + error_4);
+                        (0, errorHandlers_1.methodErrorHandler)(req, res, error_4);
                         if (error_4.isClientDataIncorrect) {
                             res.status(400);
                         }
@@ -206,7 +206,7 @@ var groupController = /** @class */ (function () {
                     case 1: return [2 /*return*/, _a.sent()];
                     case 2:
                         error_5 = _a.sent();
-                        errorHandlers_1.logger.error("getGroups: req - " + JSON.stringify(req) + "\n            Error: " + error_5);
+                        (0, errorHandlers_1.methodErrorHandler)(req, res, error_5);
                         res.status(500);
                         res.end();
                         return [3 /*break*/, 3];
@@ -231,7 +231,7 @@ var groupController = /** @class */ (function () {
                         return [3 /*break*/, 3];
                     case 2:
                         error_6 = _a.sent();
-                        errorHandlers_1.logger.error("addGroup: req - " + JSON.stringify(req) + "\n            Error: " + error_6);
+                        (0, errorHandlers_1.methodErrorHandler)(req, res, error_6);
                         if (error_6.isClientDataIncorrect) {
                             res.status(400);
                         }

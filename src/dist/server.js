@@ -20,11 +20,11 @@ var server = new inversify_express_utils_1.InversifyExpressServer(container);
 server.setConfig(function (theApp) {
     theApp.use(express.json());
     theApp.use(methodLogger_1.methodLogger);
-    theApp.use(errorHandlers_1.errorHandlers);
 });
 var app = server.build();
 var port = 3000;
 app.listen(port, function () { return console.log("Server started on port " + port); });
+app.use(errorHandlers_1.errorHandlers);
 process.on('uncaughtException', function (err, origin) {
     errorHandlers_1.logger.error("Error in process.on uncaughtException: " + err);
 });

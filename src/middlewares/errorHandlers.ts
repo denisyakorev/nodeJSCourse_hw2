@@ -1,5 +1,6 @@
 import {NextFunction, Request, Response} from "express";
 import winston, {format} from 'winston';
+import {ServiceError} from "../services";
 
 export const logger = winston.createLogger({
     level: 'error',
@@ -12,12 +13,19 @@ export const logger = winston.createLogger({
     ),
 })
 
-export const errorHandlers = (err: Error, req: Request, res: Response, next: NextFunction) => {
+export const errorHandlers = (err: Error | ServiceError, req: Request, res: Response, next: NextFunction) => {
     if (res.headersSent) {
         return next(err)
     }
+
     logger.error(err);
-    res.status(500).send('Something broke!');
+
+    if((err as ServiceError).isClientDataIncorrect) {
+        res.status(400).send(err.message)
+    } else {
+        res.status(500).send('Something broke!');
+    }
+    res.end();
 }
 
 export const methodErrorHandler = (req: Request, res: Response, error: Error) => {

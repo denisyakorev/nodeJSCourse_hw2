@@ -64,7 +64,6 @@ var inversify_1 = require("inversify");
 var inversify_express_utils_1 = require("inversify-express-utils");
 var types_1 = require("../constants/types");
 var middlewares_1 = require("../middlewares");
-var errorHandlers_1 = require("../middlewares/errorHandlers");
 var logTimeDecorator_1 = require("../utils/logTimeDecorator");
 var userController = /** @class */ (function () {
     function userController(service) {
@@ -73,29 +72,17 @@ var userController = /** @class */ (function () {
     userController.prototype.getAutoSuggestUsers = function (req, res) {
         var _a;
         return __awaiter(this, void 0, void 0, function () {
-            var loginSubstring, limit, result, error_1;
+            var loginSubstring, limit, result;
             return __generator(this, function (_b) {
                 switch (_b.label) {
                     case 0:
                         loginSubstring = (_a = req.query.loginSubstring) === null || _a === void 0 ? void 0 : _a.toString();
                         limit = req.query.limit ? parseInt(req.query.limit.toString()) : 0;
-                        _b.label = 1;
-                    case 1:
-                        _b.trys.push([1, 3, 4, 5]);
                         return [4 /*yield*/, this.service.getAutoSuggest(loginSubstring, limit)];
-                    case 2:
+                    case 1:
                         result = _b.sent();
                         res.json(result);
-                        return [3 /*break*/, 5];
-                    case 3:
-                        error_1 = _b.sent();
-                        (0, errorHandlers_1.methodErrorHandler)(req, res, error_1);
-                        res.status(500);
-                        return [3 /*break*/, 5];
-                    case 4:
-                        res.end();
-                        return [7 /*endfinally*/];
-                    case 5: return [2 /*return*/];
+                        return [2 /*return*/];
                 }
             });
         });
@@ -103,16 +90,13 @@ var userController = /** @class */ (function () {
     ;
     userController.prototype.getUser = function (req, res) {
         return __awaiter(this, void 0, void 0, function () {
-            var id, user, error_2;
+            var id, user;
             return __generator(this, function (_a) {
                 switch (_a.label) {
                     case 0:
                         id = req.params.id;
-                        _a.label = 1;
-                    case 1:
-                        _a.trys.push([1, 3, 4, 5]);
                         return [4 /*yield*/, this.service.getUser(id)];
-                    case 2:
+                    case 1:
                         user = _a.sent();
                         if (user) {
                             res.json(user);
@@ -120,16 +104,7 @@ var userController = /** @class */ (function () {
                         else {
                             res.status(404);
                         }
-                        return [3 /*break*/, 5];
-                    case 3:
-                        error_2 = _a.sent();
-                        (0, errorHandlers_1.methodErrorHandler)(req, res, error_2);
-                        res.status(500);
-                        return [3 /*break*/, 5];
-                    case 4:
-                        res.end();
-                        return [7 /*endfinally*/];
-                    case 5: return [2 /*return*/];
+                        return [2 /*return*/];
                 }
             });
         });
@@ -137,29 +112,13 @@ var userController = /** @class */ (function () {
     ;
     userController.prototype.updateUser = function (req, res) {
         return __awaiter(this, void 0, void 0, function () {
-            var updatedUser, error_3;
+            var updatedUser;
             return __generator(this, function (_a) {
                 switch (_a.label) {
-                    case 0:
-                        _a.trys.push([0, 2, , 3]);
-                        return [4 /*yield*/, this.service.updateUser(__assign(__assign({}, req.body), { id: req.params.id }))];
+                    case 0: return [4 /*yield*/, this.service.updateUser(__assign(__assign({}, req.body), { id: req.params.id }))];
                     case 1:
                         updatedUser = _a.sent();
                         res.send(updatedUser);
-                        return [3 /*break*/, 3];
-                    case 2:
-                        error_3 = _a.sent();
-                        (0, errorHandlers_1.methodErrorHandler)(req, res, error_3);
-                        if (error_3.isClientDataIncorrect) {
-                            res.status(400);
-                        }
-                        else {
-                            res.status(500);
-                        }
-                        res.send(error_3.toString());
-                        return [3 /*break*/, 3];
-                    case 3:
-                        res.end();
                         return [2 /*return*/];
                 }
             });
@@ -168,28 +127,16 @@ var userController = /** @class */ (function () {
     ;
     userController.prototype.deleteUser = function (req, res) {
         return __awaiter(this, void 0, void 0, function () {
-            var id, error_4;
+            var id;
             return __generator(this, function (_a) {
                 switch (_a.label) {
                     case 0:
                         id = req.params.id;
-                        _a.label = 1;
-                    case 1:
-                        _a.trys.push([1, 3, 4, 5]);
                         return [4 /*yield*/, this.service.deleteUser(id)];
-                    case 2:
+                    case 1:
                         _a.sent();
                         res.send(id);
-                        return [3 /*break*/, 5];
-                    case 3:
-                        error_4 = _a.sent();
-                        (0, errorHandlers_1.methodErrorHandler)(req, res, error_4);
-                        res.status(500);
-                        return [3 /*break*/, 5];
-                    case 4:
-                        res.end();
-                        return [7 /*endfinally*/];
-                    case 5: return [2 /*return*/];
+                        return [2 /*return*/];
                 }
             });
         });
@@ -197,29 +144,14 @@ var userController = /** @class */ (function () {
     ;
     userController.prototype.addUser = function (req, res) {
         return __awaiter(this, void 0, void 0, function () {
-            var id, error_5;
+            var id;
             return __generator(this, function (_a) {
                 switch (_a.label) {
-                    case 0:
-                        _a.trys.push([0, 2, , 3]);
-                        return [4 /*yield*/, this.service.createUser(req.body)];
+                    case 0: return [4 /*yield*/, this.service.createUser(req.body)];
                     case 1:
                         id = _a.sent();
                         res.status(201);
                         res.send(id);
-                        return [3 /*break*/, 3];
-                    case 2:
-                        error_5 = _a.sent();
-                        (0, errorHandlers_1.methodErrorHandler)(req, res, error_5);
-                        if (error_5.isClientDataIncorrect) {
-                            res.status(400);
-                        }
-                        else {
-                            res.status(500);
-                        }
-                        res.send(error_5.toString());
-                        return [3 /*break*/, 3];
-                    case 3:
                         res.end();
                         return [2 /*return*/];
                 }

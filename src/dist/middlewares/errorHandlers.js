@@ -33,10 +33,16 @@ var errorHandlers = function (err, req, res, next) {
         return next(err);
     }
     exports.logger.error(err);
-    res.status(500).send('Something broke!');
+    if (err.isClientDataIncorrect) {
+        res.status(400).send(err.message);
+    }
+    else {
+        res.status(500).send('Something broke!');
+    }
+    res.end();
 };
 exports.errorHandlers = errorHandlers;
 var methodErrorHandler = function (req, res, error) {
-    exports.logger.error("\n    req: \n        url: " + req.url + ",\n        params: " + JSON.stringify(req.params) + ",\n        query: " + JSON.stringify(req.query) + ",\n    \n    res: \n        status: " + res.status + ",\n        headersSent: " + res.headersSent + "\n        \n    error:\n        message: " + error.message + ",\n        stack: " + error.stack + "\n    ");
+    exports.logger.error("\n    req: \n        url: " + req.url + ",\n        params: " + JSON.stringify(req.params) + ",\n        query: " + JSON.stringify(req.query) + ",\n    \n    res: \n        headersSent: " + res.headersSent + "\n        \n    error:\n        message: " + error.message + ",\n        stack: " + error.stack + "\n    ");
 };
 exports.methodErrorHandler = methodErrorHandler;

@@ -22,13 +22,14 @@ let server = new InversifyExpressServer(container);
 server.setConfig((theApp) => {
     theApp.use(express.json());
     theApp.use(methodLogger);
-    theApp.use(errorHandlers);
 });
 
 const app = server.build();
 const port = 3000;
 
 app.listen(port, () => console.log(`Server started on port ${port}`));
+
+app.use(errorHandlers);
 
 process.on('uncaughtException', (err, origin) => {
     logger.error(`Error in process.on uncaughtException: ` + err);
