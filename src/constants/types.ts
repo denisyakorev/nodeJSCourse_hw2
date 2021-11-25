@@ -1,6 +1,6 @@
 import {IGroupService, IUserService} from "../services";
-import {IGroupRepository} from "../data-access/groupRepository";
-import {IUserRepository} from "../data-access/userRepository";
+import {GroupDAOInterface} from "../data-access/group";
+import {UserDAOInterface} from "../data-access/user";
 
 const TYPES = {
     IUserService: Symbol.for("IUserService"),

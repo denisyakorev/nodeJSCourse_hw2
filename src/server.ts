@@ -7,16 +7,16 @@ import './ioc/loader';
 import { Container } from 'inversify';
 import {groupService, IGroupService, IUserService, userService} from "./services";
 import {TYPES} from "./constants/types";
-import {groupRepository, IGroupRepository} from './data-access/groupRepository';
-import {IUserRepository, userRepository} from "./data-access/userRepository";
+import {GroupDAO, GroupDAOInterface} from './data-access/group';
+import {UserDAOInterface, UserDAO} from "./data-access/user";
 import {methodLogger} from "./middlewares/methodLogger";
 import {errorHandlers, logger} from "./middlewares/errorHandlers";
 
 let container = new Container();
 container.bind<IGroupService>(TYPES.IGroupService).to(groupService);
-container.bind<IGroupRepository>(TYPES.IGroupRepository).to(groupRepository);
+container.bind<GroupDAOInterface>(TYPES.IGroupRepository).to(GroupDAO);
 container.bind<IUserService>(TYPES.IUserService).to(userService);
-container.bind<IUserRepository>(TYPES.IUserRepository).to(userRepository);
+container.bind<UserDAOInterface>(TYPES.IUserRepository).to(UserDAO);
 
 let server = new InversifyExpressServer(container);
 server.setConfig((theApp) => {

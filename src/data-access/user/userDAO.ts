@@ -1,23 +1,23 @@
-import {IUserRepository, PublicUser} from "./userRepositoryInterface";
+import {UserDAOInterface, PublicUser} from "./userDAOInterface";
 import {Op, Sequelize} from "sequelize";
-import {User} from "../../models";
-import { UserModel } from "../EntityModels";
+import {User} from "../../dto";
 import { TYPES } from "../../constants/types";
 import { provide } from "inversify-binding-decorators";
+import { UserModel } from "../../models/user";
 
 
 export const sequelize = new Sequelize(process.env.PSQLConnectionString as string);
 
 @provide(TYPES.IUserRepository)
-export class userRepository implements IUserRepository {
+export class UserDAO implements UserDAOInterface {
     private storage: Sequelize;
 
-    private static repository?: IUserRepository
+    private static repository?: UserDAOInterface
     public static createRepository = () => {
-        if (!userRepository.repository) {
-            userRepository.repository = new userRepository();
+        if (!UserDAO.repository) {
+            UserDAO.repository = new UserDAO();
         }
-        return userRepository.repository as IUserRepository;
+        return UserDAO.repository as UserDAOInterface;
     }
 
     constructor () {

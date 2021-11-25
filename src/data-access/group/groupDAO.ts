@@ -1,21 +1,22 @@
-import { IGroupRepository } from ".";
+import { GroupDAOInterface } from ".";
 import {Op, Sequelize} from "sequelize";
-import {Group} from "../../models";
-import {GroupModel, GroupUser} from "../EntityModels";
+import {Group} from "../../dto";
+import {GroupModel} from "../../models/group";
 import {provide} from "inversify-binding-decorators";
 import {TYPES} from "../../constants/types";
+import { GroupUser } from "../../models/userToGroup";
 
 export const sequelize = new Sequelize(process.env.PSQLConnectionString as string);
 
 @provide(TYPES.IGroupRepository)
-export class groupRepository implements IGroupRepository {
+export class GroupDAO implements GroupDAOInterface {
     private storage: Sequelize;
-    private static repository?: IGroupRepository
+    private static repository?: GroupDAOInterface
     public static createRepository = () => {
-        if (!groupRepository.repository) {
-            groupRepository.repository = new groupRepository();
+        if (!GroupDAO.repository) {
+            GroupDAO.repository = new GroupDAO();
         }
-        return groupRepository.repository as IGroupRepository;
+        return GroupDAO.repository as GroupDAOInterface;
     }
 
     constructor () {
