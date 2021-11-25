@@ -1,6 +1,6 @@
-import {Group} from "../../models";
+import {Group} from "../../dto";
 
-export type IGroupRepository = {
+export type GroupDAOInterface = {
     getGroup: (groupId: string) => Promise<Group | undefined>;
     getGroups: () => Promise<Group[]>;
     isNameExists: (groupName: string) => Promise<boolean>;

@@ -1,6 +1,6 @@
-import { User } from "../../models";
+import { User } from "../../dto";
 
-export type IUserRepository = {
+export type UserDAOInterface = {
     createUser: (user: PublicUser) => Promise<string>;
     deleteUser: (id: string) => Promise<boolean>;
     getAutoSuggestUsers: (loginSubstring: string, limit: number) => Promise<User[]>;

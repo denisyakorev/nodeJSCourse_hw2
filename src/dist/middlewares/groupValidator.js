@@ -42,7 +42,7 @@ var _a;
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.groupValidator = void 0;
 var joi_1 = __importDefault(require("joi"));
-var models_1 = require("../models");
+var dto_1 = require("../dto");
 var genericValidator_1 = require("./genericValidator");
 var groupValidator = function (req, res, next) { return __awaiter(void 0, void 0, void 0, function () {
     return __generator(this, function (_a) {
@@ -53,5 +53,5 @@ var groupValidator = function (req, res, next) { return __awaiter(void 0, void 0
 exports.groupValidator = groupValidator;
 var groupScheme = joi_1.default.object({
     name: joi_1.default.string().required(),
-    permissions: joi_1.default.array().items((_a = joi_1.default.string()).valid.apply(_a, models_1.Permissions)),
+    permissions: joi_1.default.array().items((_a = joi_1.default.string()).valid.apply(_a, dto_1.Permissions)),
 });

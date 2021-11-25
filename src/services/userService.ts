@@ -1,6 +1,6 @@
 import { ServiceError } from ".";
-import { User } from "../models";
-import {IUserRepository, PublicUser} from "../data-access/userRepository/userRepositoryInterface";
+import { User } from "../dto";
+import {UserDAOInterface, PublicUser} from "../data-access/user/userDAOInterface";
 import {inject, injectable} from "inversify";
 import {TYPES} from "../constants/types";
 import { provide } from "inversify-binding-decorators";
@@ -15,9 +15,9 @@ export interface IUserService {
 
 @provide(TYPES.IUserService)
 export class userService implements IUserService {
-    private repository: IUserRepository;
+    private repository: UserDAOInterface;
 
-    constructor(@inject(TYPES.IUserRepository) repository: IUserRepository) {
+    constructor(@inject(TYPES.IUserRepository) repository: UserDAOInterface) {
         this.repository = repository;
     }
 

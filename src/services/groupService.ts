@@ -1,8 +1,8 @@
 import {provide} from "inversify-binding-decorators";
 import {inject} from "inversify";
 import { ServiceError } from ".";
-import {Group} from "../models";
-import { IGroupRepository } from "../data-access/groupRepository";
+import {Group} from "../dto";
+import { GroupDAOInterface } from "../data-access/group";
 import {TYPES} from "../constants/types";
 
 export interface IGroupService {
@@ -17,9 +17,9 @@ export interface IGroupService {
 
 @provide(TYPES.IGroupService)
 export class groupService implements IGroupService {
-    private repository: IGroupRepository;
+    private repository: GroupDAOInterface;
 
-    constructor(@inject(TYPES.IGroupRepository) repository: IGroupRepository) {
+    constructor(@inject(TYPES.IGroupRepository) repository: GroupDAOInterface) {
         this.repository = repository;
     }
 

@@ -61,26 +61,24 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.groupController = void 0;
 var inversify_1 = require("inversify");
-var types_1 = require("../constants/types");
 var inversify_express_utils_1 = require("inversify-express-utils");
+var types_1 = require("../constants/types");
 var middlewares_1 = require("../middlewares");
 var groupUsersValidator_1 = require("../middlewares/groupUsersValidator");
+var logTimeDecorator_1 = require("../utils/logTimeDecorator");
 var groupController = /** @class */ (function () {
     function groupController(service) {
         this.service = service;
     }
     groupController.prototype.getGroup = function (req, res) {
         return __awaiter(this, void 0, void 0, function () {
-            var id, group, e_1;
+            var id, group;
             return __generator(this, function (_a) {
                 switch (_a.label) {
                     case 0:
                         id = req.params.id;
-                        _a.label = 1;
-                    case 1:
-                        _a.trys.push([1, 3, 4, 5]);
                         return [4 /*yield*/, this.service.getGroup(id)];
-                    case 2:
+                    case 1:
                         group = _a.sent();
                         if (group) {
                             res.json(group);
@@ -88,15 +86,7 @@ var groupController = /** @class */ (function () {
                         else {
                             res.status(404);
                         }
-                        return [3 /*break*/, 5];
-                    case 3:
-                        e_1 = _a.sent();
-                        res.status(500);
-                        return [3 /*break*/, 5];
-                    case 4:
-                        res.end();
-                        return [7 /*endfinally*/];
-                    case 5: return [2 /*return*/];
+                        return [2 /*return*/];
                 }
             });
         });
@@ -104,27 +94,13 @@ var groupController = /** @class */ (function () {
     ;
     groupController.prototype.updateGroup = function (req, res) {
         return __awaiter(this, void 0, void 0, function () {
-            var updatedGroup, error_1;
+            var updatedGroup;
             return __generator(this, function (_a) {
                 switch (_a.label) {
-                    case 0:
-                        _a.trys.push([0, 2, , 3]);
-                        return [4 /*yield*/, this.service.updateGroup(__assign(__assign({}, req.body), { id: req.params.id }))];
+                    case 0: return [4 /*yield*/, this.service.updateGroup(__assign(__assign({}, req.body), { id: req.params.id }))];
                     case 1:
                         updatedGroup = _a.sent();
                         res.send(updatedGroup);
-                        return [3 /*break*/, 3];
-                    case 2:
-                        error_1 = _a.sent();
-                        if (error_1.isClientDataIncorrect) {
-                            res.status(400);
-                        }
-                        else {
-                            res.status(500);
-                        }
-                        res.send(error_1.toString());
-                        return [3 /*break*/, 3];
-                    case 3:
                         res.end();
                         return [2 /*return*/];
                 }
@@ -134,28 +110,16 @@ var groupController = /** @class */ (function () {
     ;
     groupController.prototype.deleteGroup = function (req, res) {
         return __awaiter(this, void 0, void 0, function () {
-            var id, err_1;
+            var id;
             return __generator(this, function (_a) {
                 switch (_a.label) {
                     case 0:
                         id = req.params.id;
-                        _a.label = 1;
-                    case 1:
-                        _a.trys.push([1, 3, 4, 5]);
                         return [4 /*yield*/, this.service.deleteGroup(id)];
-                    case 2:
+                    case 1:
                         _a.sent();
                         res.send(id);
-                        return [3 /*break*/, 5];
-                    case 3:
-                        err_1 = _a.sent();
-                        console.log(err_1);
-                        res.status(500);
-                        return [3 /*break*/, 5];
-                    case 4:
-                        res.end();
-                        return [7 /*endfinally*/];
-                    case 5: return [2 /*return*/];
+                        return [2 /*return*/];
                 }
             });
         });
@@ -163,27 +127,13 @@ var groupController = /** @class */ (function () {
     ;
     groupController.prototype.addUsersToGroup = function (req, res) {
         return __awaiter(this, void 0, void 0, function () {
-            var updatedGroup, error_2;
+            var updatedGroup;
             return __generator(this, function (_a) {
                 switch (_a.label) {
-                    case 0:
-                        _a.trys.push([0, 2, , 3]);
-                        return [4 /*yield*/, this.service.addUsersToGroup(req.params.id, req.body.userIds)];
+                    case 0: return [4 /*yield*/, this.service.addUsersToGroup(req.params.id, req.body.userIds)];
                     case 1:
                         updatedGroup = _a.sent();
                         res.send(updatedGroup);
-                        return [3 /*break*/, 3];
-                    case 2:
-                        error_2 = _a.sent();
-                        if (error_2.isClientDataIncorrect) {
-                            res.status(400);
-                        }
-                        else {
-                            res.status(500);
-                        }
-                        res.send(error_2.toString());
-                        return [3 /*break*/, 3];
-                    case 3:
                         res.end();
                         return [2 /*return*/];
                 }
@@ -203,28 +153,14 @@ var groupController = /** @class */ (function () {
     ;
     groupController.prototype.addGroup = function (req, res) {
         return __awaiter(this, void 0, void 0, function () {
-            var id, error_3;
+            var id;
             return __generator(this, function (_a) {
                 switch (_a.label) {
-                    case 0:
-                        _a.trys.push([0, 2, , 3]);
-                        return [4 /*yield*/, this.service.createGroup(req.body)];
+                    case 0: return [4 /*yield*/, this.service.createGroup(req.body)];
                     case 1:
                         id = _a.sent();
                         res.status(201);
                         res.send(id);
-                        return [3 /*break*/, 3];
-                    case 2:
-                        error_3 = _a.sent();
-                        if (error_3.isClientDataIncorrect) {
-                            res.status(400);
-                        }
-                        else {
-                            res.status(500);
-                        }
-                        res.send(error_3.toString());
-                        return [3 /*break*/, 3];
-                    case 3:
                         res.end();
                         return [2 /*return*/];
                 }
@@ -234,36 +170,42 @@ var groupController = /** @class */ (function () {
     ;
     __decorate([
         (0, inversify_express_utils_1.httpGet)('/:id'),
+        logTimeDecorator_1.logTime,
         __metadata("design:type", Function),
         __metadata("design:paramtypes", [Object, Object]),
         __metadata("design:returntype", Promise)
     ], groupController.prototype, "getGroup", null);
     __decorate([
         (0, inversify_express_utils_1.httpPut)('/:id', middlewares_1.groupValidator),
+        logTimeDecorator_1.logTime,
         __metadata("design:type", Function),
         __metadata("design:paramtypes", [Object, Object]),
         __metadata("design:returntype", Promise)
     ], groupController.prototype, "updateGroup", null);
     __decorate([
         (0, inversify_express_utils_1.httpDelete)('/:id'),
+        logTimeDecorator_1.logTime,
         __metadata("design:type", Function),
         __metadata("design:paramtypes", [Object, Object]),
         __metadata("design:returntype", Promise)
     ], groupController.prototype, "deleteGroup", null);
     __decorate([
         (0, inversify_express_utils_1.httpPost)('/:id', groupUsersValidator_1.groupUsersValidator),
+        logTimeDecorator_1.logTime,
         __metadata("design:type", Function),
         __metadata("design:paramtypes", [Object, Object]),
         __metadata("design:returntype", Promise)
     ], groupController.prototype, "addUsersToGroup", null);
     __decorate([
         (0, inversify_express_utils_1.httpGet)('/'),
+        logTimeDecorator_1.logTime,
         __metadata("design:type", Function),
         __metadata("design:paramtypes", [Object, Object]),
         __metadata("design:returntype", Promise)
     ], groupController.prototype, "getGroups", null);
     __decorate([
         (0, inversify_express_utils_1.httpPost)('/', middlewares_1.groupValidator),
+        logTimeDecorator_1.logTime,
         __metadata("design:type", Function),
         __metadata("design:paramtypes", [Object, Object]),
         __metadata("design:returntype", Promise)
