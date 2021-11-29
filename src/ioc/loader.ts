@@ -1,6 +1,6 @@
 import '../data-access/user/userDAO';
 import '../data-access/group/groupDAO';
-import '../services/groupService';
-import '../controllers/userController';
-import '../controllers/groupController';
-import '../services/userService';
+import '../services/group';
+import '../controllers/user';
+import '../controllers/group';
+import '../services/user';

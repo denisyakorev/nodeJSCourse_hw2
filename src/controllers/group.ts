@@ -8,6 +8,7 @@ import {TYPES} from "../constants/types";
 import {groupValidator} from "../middlewares";
 import {groupUsersValidator} from "../middlewares/groupUsersValidator";
 import {logTime} from "../utils/logTimeDecorator";
+import {checkAuth} from "../middlewares/checkAuth";
 
 export interface IGroupController {
     getGroup: ViewHandler;
@@ -18,7 +19,7 @@ export interface IGroupController {
     addUsersToGroup: ViewHandler;
 }
 
-@controller('/group')
+@controller('/group', checkAuth)
 export class groupController implements IGroupController {
     private service:IGroupService;
 

@@ -7,6 +7,7 @@ import { provide } from "inversify-binding-decorators";
 
 export interface IUserService {
     getUser: (userId: string) => Promise<User | undefined>;
+    getUserByCredentials: (login: string, password: string) => Promise<User | undefined>;
     getAutoSuggest: (loginSubstring: string | undefined, limit: number) => Promise<User[]>;
     createUser: (user: PublicUser) => Promise<string>;
     updateUser: (user: Omit<User, "isDeleted">) => Promise<User | Omit<User, "isDeleted">>;
@@ -43,6 +44,10 @@ export class userService implements IUserService {
         } else {
             return [];
         }
+    };
+
+    getUserByCredentials = async (login: string, password: string): Promise<User | undefined> => {
+        return await this.repository.getUserByCredentials(login, password);
     };
 
     createUser = async (user: PublicUser): Promise<string> => {

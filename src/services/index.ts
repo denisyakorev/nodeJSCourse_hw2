@@ -1,3 +1,3 @@
-export * from './userService';
-export * from './groupService';
+export * from './user';
+export * from './group';
 export * from './error';

@@ -8,6 +8,7 @@ import {TYPES} from "../constants/types";
 import {Request, Response} from "express";
 import {userValidator} from "../middlewares";
 import { logTime } from "../utils/logTimeDecorator";
+import {checkAuth} from "../middlewares/checkAuth";
 
 export interface IUserController {
     getUser: ViewHandler;
@@ -17,7 +18,7 @@ export interface IUserController {
     deleteUser: ViewHandler;
 }
 
-@controller('/user')
+@controller('/user', checkAuth)
 export class userController implements IUserController {
 
     private service: IUserService;

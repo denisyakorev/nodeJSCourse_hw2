@@ -7,7 +7,7 @@
     "test": "jest",
     "build": "tsc --outDir src/dist",
     "prestart": "npm run build",
-    "start": "cross-env PSQLConnectionString=postgres://Denis_Iakorev:@localhost:5432/Denis_Iakorev node src/dist/server"
+    "start": "cross-env PSQLConnectionString=postgres://Denis_Iakorev:@localhost:5432/Denis_Iakorev secret=SecretKey node src/dist/server"
   },
   "repository": {
     "type": "git",
@@ -21,6 +21,7 @@
   "homepage": "https://github.com/denisyakorev/nodeJSCourse_hw2#readme",
   "dependencies": {
     "babel": "^6.23.0",
+    "cors": "^2.8.5",
     "cross-env": "^7.0.3",
     "dotenv": "^10.0.0",
     "eslint": "^8.0.1",
@@ -31,6 +32,7 @@
     "inversify-express-utils": "^6.4.3",
     "joi": "^17.4.2",
     "joi-password-complexity": "^5.1.0",
+    "jsonwebtoken": "^8.5.1",
     "nodemon": "^2.0.13",
     "pg": "^8.7.1",
     "pg-hstore": "^2.3.4",
@@ -40,8 +42,10 @@
     "winston": "^3.3.3"
   },
   "devDependencies": {
+    "@types/cors": "^2.8.12",
     "@types/express": "^4.17.13",
-    "@types/jest": "^27.0.2",
+    "@types/jest": "^27.0.3",
+    "@types/jsonwebtoken": "^8.5.6",
     "@types/node": "^16.11.1",
     "@types/uuid": "^8.3.1",
     "jest": "^27.3.0",

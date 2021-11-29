@@ -3,6 +3,8 @@ import 'reflect-metadata';
 import {InversifyExpressServer} from "inversify-express-utils";
 const express = require('express');
 
+import cors from 'cors';
+
 import './ioc/loader';
 import { Container } from 'inversify';
 import {groupService, IGroupService, IUserService, userService} from "./services";
@@ -20,6 +22,7 @@ container.bind<UserDAOInterface>(TYPES.IUserRepository).to(UserDAO);
 
 let server = new InversifyExpressServer(container);
 server.setConfig((theApp) => {
+    theApp.use(cors());
     theApp.use(express.json());
     theApp.use(methodLogger);
 });

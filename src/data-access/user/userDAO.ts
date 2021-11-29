@@ -61,7 +61,22 @@ export class UserDAO implements UserDAOInterface {
     getUser = async (id: string): Promise<User | undefined> => {
         const user = await UserModel.findByPk(id);
         return user ? user : undefined;
-    }
+    };
+
+    getUserByCredentials = async (login: string, password: string): Promise<User | undefined> => {
+      const user = await UserModel.findOne({
+          where: {
+              login: {
+                  [Op.in]: [login],
+              },
+              password: {
+                  [Op.in]: [password],
+              }
+          },
+      });
+
+      return user || undefined;
+    };
 
     isLoginExists = async (login: string): Promise<boolean> => {
         const user = await UserModel.findOne({
