@@ -13,7 +13,7 @@ export const checkAuth = async (req: Request, res: Response, next: NextFunction)
     }
 
     try {
-        req.body.userId = jwt.verify(token, process.env.secret || 'secret');
+        jwt.verify(token, process.env.secret || 'secret');
     } catch (err) {
         return res.status(403).send("Invalid Token");
     }

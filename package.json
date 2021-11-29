@@ -7,7 +7,7 @@
     "test": "jest",
     "build": "tsc --outDir src/dist",
     "prestart": "npm run build",
-    "start": "cross-env PSQLConnectionString=postgres://Denis_Iakorev:@localhost:5432/Denis_Iakorev secret=SecretKey node src/dist/server"
+    "start": "cross-env PSQLConnectionString=postgres://Denis_Iakorev:@localhost:5432/Denis_Iakorev secret=SecretKey nodemon src/dist/server"
   },
   "repository": {
     "type": "git",

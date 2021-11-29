@@ -28,8 +28,10 @@ export class AuthController implements IAuthController {
     @httpPost('/', loginValidator)
     async login (req: Request, res: Response): Promise<void> {
         const user = await this.userService.getUserByCredentials(req.body.login, req.body.password);
+        console.log('user :>>', user);
         if (!user) {
             res.status(404);
+            res.end();
         } else {
             res.json({
                 accessToken: jwt.sign({id: user.id}, process.env.secret || 'secret'),

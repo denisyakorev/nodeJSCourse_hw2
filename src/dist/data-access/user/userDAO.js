@@ -112,6 +112,27 @@ var UserDAO = /** @class */ (function () {
                 }
             });
         }); };
+        this.getUserByCredentials = function (login, password) { return __awaiter(_this, void 0, void 0, function () {
+            var user;
+            var _a, _b;
+            return __generator(this, function (_c) {
+                switch (_c.label) {
+                    case 0: return [4 /*yield*/, user_1.UserModel.findOne({
+                            where: {
+                                login: (_a = {},
+                                    _a[sequelize_1.Op.in] = [login],
+                                    _a),
+                                password: (_b = {},
+                                    _b[sequelize_1.Op.in] = [password],
+                                    _b)
+                            },
+                        })];
+                    case 1:
+                        user = _c.sent();
+                        return [2 /*return*/, user || undefined];
+                }
+            });
+        }); };
         this.isLoginExists = function (login) { return __awaiter(_this, void 0, void 0, function () {
             var user;
             var _a;

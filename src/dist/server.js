@@ -1,8 +1,12 @@
 "use strict";
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 Object.defineProperty(exports, "__esModule", { value: true });
 require("reflect-metadata");
 var inversify_express_utils_1 = require("inversify-express-utils");
 var express = require('express');
+var cors_1 = __importDefault(require("cors"));
 require("./ioc/loader");
 var inversify_1 = require("inversify");
 var services_1 = require("./services");
@@ -18,6 +22,7 @@ container.bind(types_1.TYPES.IUserService).to(services_1.userService);
 container.bind(types_1.TYPES.IUserRepository).to(user_1.UserDAO);
 var server = new inversify_express_utils_1.InversifyExpressServer(container);
 server.setConfig(function (theApp) {
+    theApp.use((0, cors_1.default)());
     theApp.use(express.json());
     theApp.use(methodLogger_1.methodLogger);
 });
