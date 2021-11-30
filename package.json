@@ -7,7 +7,7 @@
     "test": "node --experimental-vm-modules node_modules/jest/bin/jest.js",
     "build": "tsc --outDir src/dist",
     "prestart": "npm run build",
-    "start": "cross-env PSQLConnectionString=postgres://Denis_Iakorev:@localhost:5432/Denis_Iakorev secret=SecretKey nodemon src/dist/server"
+    "start": "nodemon src/dist/server"
   },
   "repository": {
     "type": "git",

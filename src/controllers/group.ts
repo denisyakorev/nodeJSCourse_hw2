@@ -66,7 +66,9 @@ export class groupController implements IGroupController {
     @httpGet('/')
     @logTime
     async getGroups(req: Request, res: Response) {
-        return await this.service.getGroups();
+        const groups = await this.service.getGroups();
+        res.send(groups);
+        res.end();
     };
 
     @httpPost('/', groupValidator)

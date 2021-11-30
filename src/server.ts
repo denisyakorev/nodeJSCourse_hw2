@@ -2,17 +2,21 @@ import 'reflect-metadata';
 
 import {InversifyExpressServer} from "inversify-express-utils";
 const express = require('express');
+import { Container } from 'inversify';
 
 import cors from 'cors';
 
+import dotenv from 'dotenv';
+dotenv.config();
+
 import './ioc/loader';
-import { Container } from 'inversify';
 import {groupService, IGroupService, IUserService, userService} from "./services";
 import {TYPES} from "./constants/types";
 import {GroupDAO, GroupDAOInterface} from './data-access/group';
 import {UserDAOInterface, UserDAO} from "./data-access/user";
 import {methodLogger} from "./middlewares/methodLogger";
 import {errorHandlers, logger} from "./middlewares/errorHandlers";
+
 
 let container = new Container();
 container.bind<IGroupService>(TYPES.IGroupService).to(groupService);
