@@ -7,3 +7,4 @@ require("../controllers/user");
 require("../controllers/group");
 require("../controllers/auth");
 require("../services/user");
+require("../services/jwt");

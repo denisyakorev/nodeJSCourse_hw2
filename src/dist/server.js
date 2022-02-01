@@ -22,6 +22,7 @@ container.bind(types_1.TYPES.IGroupService).to(services_1.groupService);
 container.bind(types_1.TYPES.IGroupRepository).to(group_1.GroupDAO);
 container.bind(types_1.TYPES.IUserService).to(services_1.userService);
 container.bind(types_1.TYPES.IUserRepository).to(user_1.UserDAO);
+container.bind(types_1.TYPES.IJwtService).to(services_1.jwtService);
 var server = new inversify_express_utils_1.InversifyExpressServer(container);
 server.setConfig(function (theApp) {
     theApp.use((0, cors_1.default)());

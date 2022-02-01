@@ -1,17 +1,11 @@
-import {IUserService} from "../services";
+import {IJwtService, IUserService} from "../services";
 import {inject} from "inversify";
-import jwt from 'jsonwebtoken';
 import {TYPES} from "../constants/types";
 import {controller, httpPost} from "inversify-express-utils";
 import {loginValidator} from "../middlewares/loginValidator";
-import {randomUUID} from "crypto";
 import {ViewHandler} from "./controllerTypes";
 import {Request, Response} from "express";
 
-export type Tokens = {
-    accessToken: string;
-    refreshToken: string;
-};
 
 export interface IAuthController {
     login: ViewHandler;
@@ -20,9 +14,14 @@ export interface IAuthController {
 @controller('/login')
 export class AuthController implements IAuthController {
     private userService: IUserService;
+    private jwtService: IJwtService;
 
-    constructor(@inject(TYPES.IUserService) userService: IUserService) {
+    constructor(
+        @inject(TYPES.IUserService) userService: IUserService,
+        @inject(TYPES.IJwtService) jwtService: IJwtService
+    ) {
         this.userService =  userService;
+        this.jwtService = jwtService;
     }
 
     @httpPost('/', loginValidator)
@@ -34,8 +33,8 @@ export class AuthController implements IAuthController {
             res.end();
         } else {
             res.json({
-                accessToken: jwt.sign({id: user.id}, process.env.secret || 'secret'),
-                refreshToken: randomUUID(),
+                accessToken: this.jwtService.sign({id: user.id}),
+                refreshToken: this.jwtService.getRefreshToken({id: user.id}),
             });
         }
     };

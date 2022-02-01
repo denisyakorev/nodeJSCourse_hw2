@@ -45,12 +45,12 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
     }
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.UserDAO = exports.sequelize = void 0;
+exports.UserDAO = void 0;
 var sequelize_1 = require("sequelize");
 var types_1 = require("../../constants/types");
 var inversify_binding_decorators_1 = require("inversify-binding-decorators");
 var user_1 = require("../../models/user");
-exports.sequelize = new sequelize_1.Sequelize(process.env.PSQLConnectionString);
+var connect_1 = require("../../config/connect");
 var UserDAO = /** @class */ (function () {
     function UserDAO() {
         var _this = this;
@@ -176,7 +176,7 @@ var UserDAO = /** @class */ (function () {
                 }
             });
         }); };
-        this.storage = exports.sequelize;
+        this.storage = connect_1.sequelize;
         this.storage.authenticate()
             .then(function () { return console.log('Connection has been established successfully.'); })
             .catch(function (error) { return console.error('Unable to connect to the database:', error); });

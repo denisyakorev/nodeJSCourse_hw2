@@ -1,6 +1,6 @@
 import {DataTypes, Model, Optional} from "sequelize";
 import {Group, Permissions} from "../dto";
-import {sequelize} from "./connect";
+import {sequelize} from "../config/connect";
 
 interface GroupInterface extends Model<Group, Optional<Group, 'id'>>, Group {};
 

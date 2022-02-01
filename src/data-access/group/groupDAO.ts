@@ -5,8 +5,7 @@ import {GroupModel} from "../../models/group";
 import {provide} from "inversify-binding-decorators";
 import {TYPES} from "../../constants/types";
 import { GroupUser } from "../../models/userToGroup";
-
-export const sequelize = new Sequelize(process.env.PSQLConnectionString as string);
+import { sequelize } from "../../config/connect";
 
 @provide(TYPES.IGroupRepository)
 export class GroupDAO implements GroupDAOInterface {

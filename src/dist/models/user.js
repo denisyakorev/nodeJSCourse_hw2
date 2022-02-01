@@ -2,7 +2,7 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.UserModel = void 0;
 var sequelize_1 = require("sequelize");
-var connect_1 = require("./connect");
+var connect_1 = require("../config/connect");
 ;
 exports.UserModel = connect_1.sequelize.define('User', {
     id: {

@@ -10,7 +10,7 @@ import dotenv from 'dotenv';
 dotenv.config();
 
 import './ioc/loader';
-import {groupService, IGroupService, IUserService, userService} from "./services";
+import {groupService, IGroupService, IJwtService, IUserService, jwtService, userService} from "./services";
 import {TYPES} from "./constants/types";
 import {GroupDAO, GroupDAOInterface} from './data-access/group';
 import {UserDAOInterface, UserDAO} from "./data-access/user";
@@ -23,6 +23,7 @@ container.bind<IGroupService>(TYPES.IGroupService).to(groupService);
 container.bind<GroupDAOInterface>(TYPES.IGroupRepository).to(GroupDAO);
 container.bind<IUserService>(TYPES.IUserService).to(userService);
 container.bind<UserDAOInterface>(TYPES.IUserRepository).to(UserDAO);
+container.bind<IJwtService>(TYPES.IJwtService).to(jwtService);
 
 let server = new InversifyExpressServer(container);
 server.setConfig((theApp) => {

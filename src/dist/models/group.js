@@ -12,7 +12,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.GroupModel = void 0;
 var sequelize_1 = require("sequelize");
 var dto_1 = require("../dto");
-var connect_1 = require("./connect");
+var connect_1 = require("../config/connect");
 ;
 exports.GroupModel = connect_1.sequelize.define('Group', {
     id: {

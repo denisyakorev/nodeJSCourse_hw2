@@ -45,13 +45,13 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
     }
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.GroupDAO = exports.sequelize = void 0;
+exports.GroupDAO = void 0;
 var sequelize_1 = require("sequelize");
 var group_1 = require("../../models/group");
 var inversify_binding_decorators_1 = require("inversify-binding-decorators");
 var types_1 = require("../../constants/types");
 var userToGroup_1 = require("../../models/userToGroup");
-exports.sequelize = new sequelize_1.Sequelize(process.env.PSQLConnectionString);
+var connect_1 = require("../../config/connect");
 var GroupDAO = /** @class */ (function () {
     function GroupDAO() {
         var _this = this;
@@ -162,7 +162,7 @@ var GroupDAO = /** @class */ (function () {
                 switch (_a.label) {
                     case 0:
                         _a.trys.push([0, 2, , 3]);
-                        return [4 /*yield*/, exports.sequelize.transaction(function (t) { return __awaiter(_this, void 0, void 0, function () {
+                        return [4 /*yield*/, connect_1.sequelize.transaction(function (t) { return __awaiter(_this, void 0, void 0, function () {
                                 var _this = this;
                                 return __generator(this, function (_a) {
                                     userIds.forEach(function (userId) { return __awaiter(_this, void 0, void 0, function () {
@@ -192,7 +192,7 @@ var GroupDAO = /** @class */ (function () {
                 }
             });
         }); };
-        this.storage = exports.sequelize;
+        this.storage = connect_1.sequelize;
         this.storage.authenticate()
             .then(function () { return console.log('Connection has been established successfully.'); })
             .catch(function (error) { return console.error('Unable to connect to the database:', error); });

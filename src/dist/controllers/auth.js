@@ -47,21 +47,17 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
         if (op[0] & 5) throw op[1]; return { value: op[0] ? op[1] : void 0, done: true };
     }
 };
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-};
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.AuthController = void 0;
 var inversify_1 = require("inversify");
-var jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
 var types_1 = require("../constants/types");
 var inversify_express_utils_1 = require("inversify-express-utils");
 var loginValidator_1 = require("../middlewares/loginValidator");
-var crypto_1 = require("crypto");
 ;
 var AuthController = /** @class */ (function () {
-    function AuthController(userService) {
+    function AuthController(userService, jwtService) {
         this.userService = userService;
+        this.jwtService = jwtService;
     }
     AuthController.prototype.login = function (req, res) {
         return __awaiter(this, void 0, void 0, function () {
@@ -78,8 +74,8 @@ var AuthController = /** @class */ (function () {
                         }
                         else {
                             res.json({
-                                accessToken: jsonwebtoken_1.default.sign({ id: user.id }, process.env.secret || 'secret'),
-                                refreshToken: (0, crypto_1.randomUUID)(),
+                                accessToken: this.jwtService.sign({ id: user.id }),
+                                refreshToken: this.jwtService.getRefreshToken({ id: user.id }),
                             });
                         }
                         return [2 /*return*/];
@@ -97,7 +93,8 @@ var AuthController = /** @class */ (function () {
     AuthController = __decorate([
         (0, inversify_express_utils_1.controller)('/login'),
         __param(0, (0, inversify_1.inject)(types_1.TYPES.IUserService)),
-        __metadata("design:paramtypes", [Object])
+        __param(1, (0, inversify_1.inject)(types_1.TYPES.IJwtService)),
+        __metadata("design:paramtypes", [Object, Object])
     ], AuthController);
     return AuthController;
 }());

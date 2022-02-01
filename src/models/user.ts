@@ -1,6 +1,6 @@
 import {DataTypes, Model, Optional} from "sequelize";
 import {User} from "../dto";
-import {sequelize} from "./connect";
+import {sequelize} from "../config/connect";
 
 interface UserInterface extends Model<User, Optional<User, 'id' | 'isDeleted'>>, User {};
 

@@ -4,9 +4,8 @@ import {User} from "../../dto";
 import { TYPES } from "../../constants/types";
 import { provide } from "inversify-binding-decorators";
 import { UserModel } from "../../models/user";
+import { sequelize } from '../../config/connect';
 
-
-export const sequelize = new Sequelize(process.env.PSQLConnectionString as string);
 
 @provide(TYPES.IUserRepository)
 export class UserDAO implements UserDAOInterface {

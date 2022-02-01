@@ -1,0 +1,11 @@
+version: '3.3'
+services:
+  pg:
+    image: postgres:13.5
+    restart: always
+    environment:
+      POSTGRES_USER: 'denis'
+      POSTGRES_PASSWORD: 'nodeJSCourse'
+      POSTGRES_DB: 'node_js_course'
+    ports:
+      - '5432:5432'

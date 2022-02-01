@@ -1,7 +1,7 @@
 import { ServiceError } from ".";
 import { User } from "../dto";
 import {UserDAOInterface, PublicUser} from "../data-access/user/userDAOInterface";
-import {inject, injectable} from "inversify";
+import {inject} from "inversify";
 import {TYPES} from "../constants/types";
 import { provide } from "inversify-binding-decorators";
 

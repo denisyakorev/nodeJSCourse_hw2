@@ -1,5 +1,5 @@
 import {DataTypes} from "sequelize";
-import { sequelize } from "./connect";
+import { sequelize } from "../config/connect";
 import { GroupModel } from "./group";
 import { UserModel } from "./user";
 

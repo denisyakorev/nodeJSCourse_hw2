@@ -2,7 +2,7 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.GroupUser = void 0;
 var sequelize_1 = require("sequelize");
-var connect_1 = require("./connect");
+var connect_1 = require("../config/connect");
 var group_1 = require("./group");
 var user_1 = require("./user");
 exports.GroupUser = connect_1.sequelize.define('GroupUsers', {
